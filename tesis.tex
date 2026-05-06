@@ -1,310 +1,223 @@
-%--------- Tipo de documento y definicion de paquetes ----------
-%---------------------------------------------------------------
+%==============================================================
+%  TESIS DE LICENCIATURA
+%  Autor: Jorge Esteban Mendoza Ortiz
+%  Archivo maestro: tesis.tex
+%==============================================================
+
 \documentclass[11pt, letter, twoside]{book}
-\usepackage[utf8]{inputenc}
 
-\title{tesis}
-\author{nombreAutor}
-%\date{February 2019}
+%--------------------------------------------------------------
+%  CODIFICACIÓN Y FUENTES
+%  Orden importante: inputenc -> fontenc -> fuente -> microtype
+%--------------------------------------------------------------
+\usepackage[utf8]{inputenc}     % Permite escribir acentos directamente
+\usepackage[T1]{fontenc}        % Acentos como un solo glifo (mejor copiado/búsqueda)
+\usepackage{mathptmx}           % Fuente tipo Times (texto + matemáticas)
+% Alternativas:
+%\usepackage{lmodern}           % Computer Modern moderno
+%\usepackage{newpxtext}\usepackage{newpxmath}  % Palatino moderno
+\usepackage{microtype}          % Mejora justificación y espaciado (¡muy recomendado!)
 
-\usepackage{graphicx,amssymb,amsmath,amsfonts,psfrag,fancyhdr,layout,appendix,subfig}
-\usepackage[spanish]{babel}
-%\usepackage[latin1]{inputenc}
-\usepackage{makeidx}
-\usepackage{fncychap}
-\usepackage{caption}
-\usepackage{enumitem}
-\usepackage{array,tabularx}
-\usepackage[T1]{fontenc}
-\usepackage{booktabs}
+%--------------------------------------------------------------
+%  IDIOMA
+%--------------------------------------------------------------
+\usepackage[spanish, es-tabla]{babel}
+% es-tabla : "Cuadro" -> "Tabla" automáticamente
+\spanishdecimal{.}              % Usa punto decimal en lugar de coma
+
+%--------------------------------------------------------------
+%  PAQUETES GENERALES
+%--------------------------------------------------------------
+\usepackage{graphicx}                    % Inclusión de imágenes
+\usepackage{amssymb, amsmath, amsfonts}  % Matemáticas
+\usepackage{psfrag, epsfig}              % Figuras EPS
+\usepackage{float}                       % Control de objetos flotantes
+\usepackage{subcaption}                  % Subfiguras (sustituye al obsoleto subfig)
+\usepackage{caption}                     % Personalización de pies
+\usepackage{booktabs, array, tabularx}   % Tablas profesionales
+\usepackage{enumitem}                    % Listas personalizables
+\usepackage{epigraph}                    % Citas al inicio de capítulos
+\usepackage{verbatim}                    % Mejora \verbatim
+\usepackage{url}                         % Formateo de URLs
+\usepackage{color}                       % Colores
+\usepackage{ccicons}                     % Iconos de Creative Commons
+\usepackage{layout, appendix}            % Utilidades varias
+\usepackage{makeidx}                     % Índice analítico
+\usepackage{setspace}                    % Control de interlineado
+
+%--------------------------------------------------------------
+%  ENCABEZADOS, MÁRGENES Y BIBLIOGRAFÍA
+%--------------------------------------------------------------
+\usepackage{fancyhdr}                                                    % Encabezados/pies
+\usepackage[left=3.4cm, top=2.5cm, right=2.6cm, bottom=2.5cm]{geometry}  % Márgenes
+\usepackage[sort&compress]{natbib}                                       % Citas
+\usepackage{tocbibind}            % Incluye TOC, LoF, LoT y bibliografía en el índice
+
+%--------------------------------------------------------------
+%  HYPERREF (siempre casi al final del preámbulo)
+%--------------------------------------------------------------
+\usepackage[
+colorlinks=true,
+linkcolor=black,    % Enlaces internos (TOC, refs) en negro -> mejor para imprimir
+citecolor=black,    % Citas bibliográficas en negro
+urlcolor=blue,      % URLs en azul
+bookmarksnumbered=true,
+pdftitle={Título de la tesis},
+pdfauthor={Jorge Esteban Mendoza Ortiz}
+]{hyperref}
+
+%--------------------------------------------------------------
+%  COMANDOS PERSONALIZADOS
+%--------------------------------------------------------------
+% Permite citar notas al pie por etiqueta: \footnoteref{lbl}
 \makeatletter
 \newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
 \makeatother
-%\usepackage[times]{quotchap}
-\usepackage{epigraph}
 
-%\usepackage{cite}
-%\usepackage{subfigure}
-\usepackage{float} %redefinicion de objetos flotantes
-%\usepackage{ucs}
-%\usepackage[utf8]{inputenc}
-
-
-\usepackage[sort&compress]{natbib}
-
-\usepackage{hyperref}
-%\usepackage{tocbibind}
-
-\usepackage{setspace} %Paquete para crear intelineados en cualquier parte del documento
-
-%Para bibliogafía por capítulos con BibTeX
-%\usepackage{natbib}%[sectionbib]{natbib} nonamebreak
-%\usepackage[sort,nonamebreak,sectionbib,square]{natbib}
-%\usepackage[sort&compress,comma,authoryear]{natbib}
-
-%%%% Paquetes para bibliografía %%%%%%%
-%\usepackage{natbib}
-%\usepackage{babelbib}
-%\usepackage[spanish, authoryear]{flexbib}
-%\usepackage{chapterbib}
-
-%This change labels of subfig
-
-%\renewcommand{\thesubfigure}{\alph{subfigure}\arabic{subfiggroup}}
-%\captionsetup[subfigure]{labelformat=simple,labelsep=colon,                    listofformat=subsimple}
-%\captionsetup{lofdepth=2} This is in order to list the subfigures in the LOF
-
-%This include theorem environments
+%--------------------------------------------------------------
+%  ENTORNOS DE TEOREMAS
+%--------------------------------------------------------------
 \newtheorem{theorem}{Teorema}[chapter]
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lema}
+\newtheorem{proposition}[theorem]{Proposición}
 \newtheorem{corollary}[theorem]{Corolario}
 
-%\newenvironment{proof}[1][Proof]{\begin{trivlist}
-%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
 \newenvironment{definition}[1]
 {\par\noindent\textbf{Definición(#1)}\begin{itshape}\par\noindent}%
-{\end{itshape}} 
-%----------------------------------------
-%\newenvironment{proof}[1][Proof]{\begin{trivlist}
-%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
-%\newenvironment{example}[1][Example]{\begin{trivlist}
-%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
-%\newenvironment{remark}[1][Remark]{\begin{trivlist}
-%\item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+	{\end{itshape}}
 
-%\newcommand{\qed}{\nobreak \ifvmode \relax \else
-%      \ifdim\lastskip<1.5em \hskip-\lastskip
-%      \hskip1.5em plus0em minus0.5em \fi \nobreak
-%      \vrule height0.75em width0.5em depth0.25em\fi}
-%----------------------------------------
-
-\makeatletter
- \renewcommand{\p@subfigure}{}
-  %Esto lo agrego yo para tener subfiguras a1, b1, ... a2, b2, ... 
-  %Se reinicia cada vez que una nueva figura es convocada (como es debido).
-  \newcounter{subfiggroup}[figure] 
-\makeatother
-
-%\usepackage[spanish]{babel}
-\usepackage{epsfig}
-\usepackage{url}
-%Esto genera enlaces en el PDF
-%\usepackage{latex2html}
-%Esto es para el conversor latex2html
-\usepackage{color}
-%Esto cambia la coma por el punto decimal en las cifras 
-\spanishdecimal{.}
-\pagecolor{white}
-
-%Este mejora las prestaciones de "\verbatim"
-\usepackage{verbatim}
-
-%Definición de margenes
-\usepackage[left=3.4cm,top=2.5cm,right=2.6cm,bottom=2.5cm]{geometry}
-\sloppy
-\pagestyle{empty}
-
-% Code for creating empty pages
-% No headers on empty pages before new chapter
-
-\makeatletter
-\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
-    \hbox{}
-    \thispagestyle{plain}
-    \newpage
-    \if@twocolumn\hbox{}\newpage\fi\fi\fi}
-\makeatother \clearpage{\pagestyle{plain}\cleardoublepage}
-
-% Code for creating fully-empty pages
-% Fully empty pages before command is called
-\makeatletter
-\def\clearfullypage{\clearpage\if@twoside \ifodd\c@page\else
-    \hbox{}
-    \thispagestyle{empty}
-    \newpage
-    \if@twocolumn\hbox{} \newpage\fi\fi\fi}
-\makeatother \clearpage{\pagestyle{empty}\clearfullypage}
-
-% Dutch style of paragraph formatting, i.e. no indents.
-\setlength{\parskip}{1.3ex plus 0.2ex minus 0.2ex}
-\setlength{\parindent}{15pt}  % longitud de la sangría
-%Leyendas de las graficas en letra pequeña, negrita, margen 2.5 y sangradas...
+%--------------------------------------------------------------
+%  FORMATO DE PÁRRAFO Y PIES DE FIGURA
+%--------------------------------------------------------------
+\setlength{\parskip}{0pt}        % Sin espacio extra entre párrafos
+\setlength{\parindent}{1.5em}    % Sangría tradicional en español
 \captionsetup{font=small, labelfont={bf}, margin=2.5cm, format=hang}
 
-%\setlength{\captionmargin}{60pt} %Margen de los pies de figura
+%--------------------------------------------------------------
+%  PROFUNDIDAD DE NUMERACIÓN E ÍNDICE
+%--------------------------------------------------------------
+\setcounter{secnumdepth}{3}   % Numera hasta \subsubsection
+\setcounter{tocdepth}{3}      % Las muestra en el TOC
 
-%\includeonly{edicion}
-%\includeonly{jurado,apoyo,licencia,edicion,reconocimientos,tvs}
+%--------------------------------------------------------------
+%  COMPILACIÓN PARCIAL (descomentar mientras se redacta)
+%--------------------------------------------------------------
+%\includeonly{capitulos/capitulo4}
 
-% Double space for REVISION
+%--------------------------------------------------------------
+%  INTERLINEADO DOBLE PARA REVISIÓN (descomentar al revisar)
+%--------------------------------------------------------------
 %\renewcommand{\baselinestretch}{2.0}
 
-%Print subsubsection numbers and put them in TOC
-\setcounter{secnumdepth}{3}
-\setcounter{tocdepth}{3}
+%--------------------------------------------------------------
+%  PÁGINAS EN BLANCO ENTRE CAPÍTULOS (sin encabezado)
+%--------------------------------------------------------------
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else
+	\hbox{}\thispagestyle{plain}\newpage
+	\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
 
-%-------- Fin tipo de documento y definicion de paquetes -------
-%---------------------------------------------------------------
+\makeatletter
+\def\clearfullypage{\clearpage\if@twoside \ifodd\c@page\else
+	\hbox{}\thispagestyle{empty}\newpage
+	\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
 
+%--------------------------------------------------------------
+%  METADATOS
+%--------------------------------------------------------------
+\title{tesis}
+\author{Jorge Esteban Mendoza Ortiz}
 
-%--------------  Inicio del Documento Maestro ------------------
-%---------------------------------------------------------------
-
+\pagecolor{white}
 \makeindex
-%\renewcommand{\baselinestretch}{1.5}
 
+%==============================================================
+%  CUERPO DEL DOCUMENTO
+%==============================================================
 \begin{document}
-%Cambiar Cuadros por Tablas y lista de... Debe ir después de \begin{document}
-\renewcommand{\listtablename}{Índice de tablas} 
-\renewcommand{\tablename}{Tabla} 
-
-%%%%%%%%%%%%%55%%%%%%%%%%%%%%%%%%%%%
-\frontmatter
-
-%---------------- Portada -------------------------------------
-%\input{portada}
-%Se compila aparte y se junta con "gs".
-%gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=tesiscompleta.pdf -dBATCH portada.pdf tesis.pdf
-%---------------------------------------------------------------
-
-
-%------------------ Información preeliminar --------------------
-%---------------------------------------------------------------
-
-\singlespacing %Interlineado sencillo \usepackage{setspace}
-\pagestyle{empty}
-\include{includes/jurado}
-%\clearfullypage
-%\pagenumbering{roman}
-\include{includes/apoyo}
-\include{includes/licencia}
-%\clearfullypage
-\include{includes/dedicatoria}
-%\include{frases}
-%\clearfullypage
-\include{includes/gracias}
-
-%\color[rgb]{0,0,0}
-
-% Define pagestyle
-\pagestyle{fancy}
-\fancyhf{}
-\renewcommand{\chaptermark}[1]{\markboth{ \emph{#1}}{}}
-\fancyhead[LO]{}
-\fancyhead[LO]{}
-\fancyfoot[LE,RO]{\thepage}
-
-% Redefine plain page style
-%---------------------------------
-\fancypagestyle{plain}{
-\fancyhf{}
-\renewcommand{\headrulewidth}{0pt}
-\fancyfoot[LE,RO]{\thepage}
-}
-%---------------------------------
-
-% Dutch style of paragraph formatting, i.e. no indents.
-\setlength{\parskip}{1.3ex plus 0.2ex minus 0.2ex}
-
-% Remove parskip for toc
-\setlength{\parskip}{0ex plus 0.5ex minus 0.2ex}
-
-\tableofcontents
-\listoffigures
-\listoftables
-
-%\cleardoublepage
-%\clearfullypage
-\include{includes/resumen} 
-%\cleardoublepage
-%Resumen en inglés
-\include{includes/summary} 
-%\cleardoublepage
-
-
-%------------------- Fin información preeliminar----------------
-%---------------------------------------------------------------
-
-
-%------------------- Capítulos de la tesis ---------------------
-%---------------------------------------------------------------
-
-
-% Adjustments headers
-\fancyhead[RO]{\leftmark}
-
-%%%%%%%%%%%%%
-\mainmatter
-%%%%%%%%%%%%%
-\pagenumbering{arabic}
-% Adjustments headers
-\fancyhead[RO]{\leftmark}
-\fancyhead[EL]{\emph{Capítulo \thechapter}}
-%\setcounter{page}{3}
-
-\medskip
-%Interlineados  \usepackage{setspace}
-%\onehalfspacing 
-\singlespacing
-%Introduccion
-\include{capitulos/capitulo1}
-%Perfilado de autor
-\include{capitulos/capitulo2}
-%Estado del arte
-\include{capitulos/capitulo3}
-%Metodología propuesta
-\include{capitulos/capitulo4}
-%Resultados experimentales
-\include{capitulos/capitulo5}
-%Propuesta de Reconfiguración con base en frecuencias de transmisión
-%\include{frectrans}
-%Simulaciones Numéricas
-%\include{simulnum}
-%Conclusiones
-\include{capitulos/conclusiones}
-
-%------------------- Fin capítulos de la tesis -----------------
-%---------------------------------------------------------------
-
-
-%------------------------- Apéndices  --------------------------
-%---------------------------------------------------------------
-
-%\part*{\addcontentsline{toc}{part}{Apéndices}Apéndices}
-
-% Adjustments headers
-%\fancyhead[RO]{\leftmark}
-%\fancyhead[EL]{\emph{Apéndice \thechapter}}
-
-%%%%%%%%%%%%%
-%\appendix
-%\include{apendices/software}
-
-%%%%%%%%%%%%%
-\backmatter
-%%%%%%%%%%%%%
-% Adjustments headers
-\fancyhead[RO]{\leftmark}
-\fancyhead[EL]{}
-
-%---------------------- Fin Apéndices  -------------------------
-%---------------------------------------------------------------
-
-%\addcontentsline{toc}{chapter}{Bibliografía}
-%\bibliography{lmm,gengisNOlmm}
-
-%---------------------- para bibtec--------------
-%flexbib
-\bibliography{biblio}
-\bibliographystyle{abbrv} %alpha %natdin %apalike %babplain 
-%------------------------------------------------
-
-
-\printindex
+	
+	%--------------------------------------------------------------
+	%  MATERIAL PRELIMINAR (numeración romana)
+	%--------------------------------------------------------------
+	\frontmatter
+	\singlespacing
+	\pagestyle{empty}
+	
+	% Portada: se compila aparte y se junta con ghostscript:
+	% gs -dNOPAUSE -sDEVICE=pdfwrite -sOUTPUTFILE=tesiscompleta.pdf \
+	%    -dBATCH portada.pdf tesis.pdf
+	
+	\include{includes/jurado}
+	\include{includes/apoyo}
+	\include{includes/licencia}
+	\include{includes/dedicatoria}
+	\include{includes/gracias}
+	
+	%--------------------------------------------------------------
+	%  ESTILO DE PÁGINA PARA EL RESTO
+	%--------------------------------------------------------------
+	\pagestyle{fancy}
+	\fancyhf{}
+	\renewcommand{\chaptermark}[1]{\markboth{\emph{#1}}{}}
+	\fancyfoot[LE,RO]{\thepage}
+	
+	\fancypagestyle{plain}{%
+		\fancyhf{}
+		\renewcommand{\headrulewidth}{0pt}
+		\fancyfoot[LE,RO]{\thepage}
+	}
+	
+	% Sin parskip extra en los índices
+	\setlength{\parskip}{0ex plus 0.5ex minus 0.2ex}
+	
+	\tableofcontents
+	\listoffigures
+	\listoftables
+	
+	\include{includes/resumen}
+	\include{includes/summary}
+	
+	%--------------------------------------------------------------
+	%  CAPÍTULOS (numeración arábiga)
+	%--------------------------------------------------------------
+	\mainmatter
+	\pagenumbering{arabic}
+	\singlespacing
+	
+	\fancyhead[RO]{\leftmark}
+	\fancyhead[EL]{\emph{Capítulo \thechapter}}
+	
+	\include{capitulos/capitulo1}     % Introducción
+	\include{capitulos/capitulo2}     % Perfilado de autor
+	\include{capitulos/capitulo3}     % Estado del arte
+	\include{capitulos/capitulo4}     % Metodología propuesta
+	\include{capitulos/capitulo5}     % Resultados experimentales
+	\include{capitulos/conclusiones}  % Conclusiones
+	
+	%--------------------------------------------------------------
+	%  APÉNDICES (descomentar cuando se tengan)
+	%--------------------------------------------------------------
+	%\appendix
+	%\fancyhead[EL]{\emph{Apéndice \thechapter}}
+	%\include{apendices/software}
+	
+	%--------------------------------------------------------------
+	%  MATERIAL FINAL
+	%--------------------------------------------------------------
+	\backmatter
+	\fancyhead[RO]{\leftmark}
+	\fancyhead[EL]{}
+	
+	\bibliography{biblio}
+	\bibliographystyle{abbrv}    % Alternativas: alpha, apalike, plainnat, ...
+	
+	\printindex
+	
 \end{document}
 
-%%% Local Variables: 
+%%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "tesis"
-%%% End: 
+%%% End:
