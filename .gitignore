@@ -1,0 +1,75 @@
+# .gitignore for LaTeX projects
+
+## Core auxiliary files
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+.*.lb
+
+## Bibliography
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+
+## Build tools
+*.fdb_latexmk
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.pdfsync
+
+## Indices
+*.idx
+*.ilg
+*.ind
+*.ist
+
+## Nomenclature
+*.nlo
+*.nls
+
+## Glossaries
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.glsdefs
+
+## Beamer
+*.nav
+*.pre
+*.snm
+*.vrb
+
+## Changes package
+*.soc
+
+## Latexian
+TSWLatexianTemp*
+
+## Listings
+*.lol
+
+## Hyperref
+*.brf
+
+## Tikz externalization
+*.dpth
+*.md5
+*.auxlock
+
+## OS files
+.DS_Store
+Thumbs.db
