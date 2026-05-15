@@ -3,11 +3,37 @@
 ## Pendientes
 
 - Tesis
+  - Revisar cada modelo representativo para determinar sus características
+    - Determinar un conjunto mínimo de elementos teóricos que agregar
   - Estudiar distribución del número de documentos relevantes por query para explicar métricas
   - Revisar resultados y métodos:
     - Artículos utilizando MessIRve
     - MTEB y La Leaderboard
     - Comparar los resultados obtenidos con resultados en otras lenguas para todos los modelos involucrados
+
+## Modelos
+
+- Léxicos
+  - BM25
+- Dual-encoders:
+  - multilingual-e5-large-instruct
+  - BGE-M3
+  - Qwen3-Embedding-8B
+  - jina-embeddings-v5-text-small
+- Dispersos:
+  - SPLADE-v3
+- Interacción tardía:
+  - Jina-ColBERT-v2
+- Cross-encoders:
+  - bge-reranker-v2-m3
+  - jina-reranker-v3
+
+- Rerankers:
+  - Rank-Biased Centroids (rbc)
+  - RRF
+  - CombMNZ
+  - Condorcet-fuse
+  - Borda-fuse
 
 ## Métricas
 
@@ -47,37 +73,37 @@ Características clave:
 
 ### Índice
 
-3. Marco teórico
-   3.1 Fundamentos de recuperación de información
+2. Marco teórico
+   2.1 Fundamentos de recuperación de información
        (definición formal del problema, espacio de documentos, relevancia)
-   3.2 Modelos léxicos: fundamentos
+   2.2 Modelos léxicos: fundamentos
        (TF-IDF, BM25 como caso del Probabilistic Relevance Framework)
-   3.3 Representaciones vectoriales del lenguaje
-       3.3.1 Hipótesis distribucional y embeddings estáticos
-       3.3.2 Arquitectura Transformer y atención
-       3.3.3 Embeddings contextuales
-   3.4 Paradigmas de modelos neuronales para IR
+   2.3 Representaciones vectoriales del lenguaje
+       2.3.1 Hipótesis distribucional y embeddings estáticos
+       2.3.2 Arquitectura Transformer y atención
+       2.3.3 Embeddings contextuales
+   2.4 Paradigmas de modelos neuronales para IR
        (definiciones formales de dual-encoder, sparse-encoder, 
        cross-encoder, late interaction — sin entrar en modelos concretos)
-   3.5 Aprendizaje de representaciones
-       3.5.1 Funciones de pérdida contrastivas
-       3.5.2 Fine-tuning y aproximaciones de bajo rango
-       3.5.3 Representaciones jerárquicas y truncables
-   3.6 Fundamentos matemáticos de la fusión de rangos
+   2.5 Aprendizaje de representaciones
+       2.5.1 Funciones de pérdida contrastivas
+       2.5.2 Fine-tuning y aproximaciones de bajo rango
+       2.5.3 Representaciones jerárquicas y truncables
+   2.6 Fundamentos matemáticos de la fusión de rangos
        (definición de lista ordenada, agregación de preferencias, 
        Condorcet, Borda como objetos formales)
-   3.7 Evaluación en recuperación de información
+   2.7 Evaluación en recuperación de información
        (definiciones de nDCG, MAP, MRR, Recall, Precision)
 
-4. Estado del arte
-   4.1 Modelos léxicos modernos y variantes de BM25
-   4.2 Modelos semánticos representativos
+3. Estado del arte
+   3.1 Modelos léxicos modernos y variantes de BM25
+   3.2 Modelos semánticos representativos
        (E5, BGE, Jina, mDPR, SPLADE, ColBERT, etc., 
        discutiendo cómo cada uno aplica las técnicas del cap. 3:
        LoRA, Matryoshka, esquemas de entrenamiento específicos)
-   4.3 Modelos de reranking neuronal
-   4.4 Estrategias de fusión y reranking en la literatura
-   4.5 Benchmarks de IR
-       4.5.1 Multilingües
-       4.5.2 En español (MessIRve y antecedentes)
-   4.6 Particularidades del español en IR
+   3.3 Modelos de reranking neuronal
+   3.4 Estrategias de fusión y reranking en la literatura
+   3.5 Benchmarks de IR
+       3.5.1 Multilingües
+       3.5.2 En español (MessIRve y antecedentes)
+   3.6 Particularidades del español en IR
