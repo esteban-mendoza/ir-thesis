@@ -16,17 +16,72 @@
 - Léxicos
   - BM25
 - Dual-encoders:
-  - multilingual-e5-large-instruct
-  - BGE-M3
-  - Qwen3-Embedding-8B
-  - jina-embeddings-v5-text-small
+  - intfloat/multilingual-e5-large-instruct
+  - BAAI/bge-m3
+  - Qwen/Qwen3-Embedding-0.6B
+  - jinaai/jina-embeddings-v5-text-small
+  - microsoft/harrier-oss-v1-0.6b
 - Dispersos:
-  - SPLADE-v3
+  - naver/splade-v3
 - Interacción tardía:
-  - Jina-ColBERT-v2
+  - jinaai/jina-colbert-v2
 - Cross-encoders:
-  - bge-reranker-v2-m3
-  - jina-reranker-v3
+  - BAAI/bge-reranker-v2-m3
+  - jinaai/jina-reranker-v3
+
+### Fuentes
+
+- BM25:
+  - Robertson, S. E., & Spärck Jones, K. (1976). Relevance weighting of search terms. Journal of the American Society for Information Science.
+  - Robertson, S. E., & Walker, S. (1994). Some simple effective approximations to the 2-Poisson model for probabilistic weighted retrieval. Proceedings of the 17th Annual International ACM SIGIR Conference on Research and Development in Information Retrieval.
+  - Spärck Jones, K., Walker, S., & Robertson, S. E. (2000). A probabilistic model of information retrieval: development and comparative experiments: Part 1 & Part 2. Information Processing & Management.
+  - Robertson, S., & Zaragoza, H. (2009). The Probabilistic Relevance Framework: BM25 and Beyond. Foundations and Trends in Information Retrieval.
+- intfloat/multilingual-e5-large-instruct
+  - Wang, L., Yang, N., Huang, X., Yang, L., Majumder, R., & Wei, F. (2024). Multilingual E5 Text Embeddings: A Technical Report. arXiv preprint arXiv:2402.05672.
+- BAAI/bge-m3
+  - Chen, J., Xiao, S., Zhang, P., Luo, K., Lian, D., & Wang, J. (2024). BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation. arXiv preprint arXiv:2402.03216.
+- Qwen/Qwen3-Embedding-0.6B
+  - Zhang, Y., et al. (2025). Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models. arXiv preprint arXiv:2506.05176.
+- jinaai/jina-embeddings-v5-text-small
+  - Akram, M. K., Sturua, S., Havriushenko, N., Herreros, Q., Günther, M., Werk, M., & Xiao, H. (2026). jina-embeddings-v5-text: Task-Targeted Embedding Distillation. arXiv preprint arXiv:2602.15547.
+- microsoft/harrier-oss-v1-0.6b
+  - Huang, X., Wang, L., Wei, F., Lu, J., Risvik, K., & Li, J. (2026). Microsoft Open Sources Industry-Leading Embedding Model. Technical Announcement, Microsoft Research / Foundry Labs.
+- naver/splade-v3
+  - Formal, T., Lassance, C., Piwowarski, B., & Clinchant, S. (2021). SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking. Proceedings of the 44th International ACM SIGIR Conference on Research and Development in Information Retrieval.
+  - Lassance, C., Déjean, H., Formal, T., & Clinchant, S. (2024). SPLADE-v3: New baselines for SPLADE. arXiv preprint arXiv:2403.06789.
+- jinaai/jina-colbert-v2
+  - Khattab, O., & Zaharia, M. (2020). ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT. Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval.
+  - Jha, R., Wang, B., Günther, M., Mastrapas, G., Sturua, S., Mohr, I., Koukounas, A., Akram, M. K., Wang, N., & Xiao, H. (2024). Jina-ColBERT-v2: A General-Purpose Multilingual Late Interaction Retriever. Proceedings of the Association for Computational Linguistics (ACL) / EMNLP 2024.
+- BAAI/bge-reranker-v2-m3
+  - Chen, J., Xiao, S., Zhang, P., Luo, K., Lian, D., & Wang, J. (2024). BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation. arXiv preprint arXiv:2402.03216 (Presenta la arquitectura técnica del ecosistema unificado BGE M3 / Reranker-v2).
+  - Li, C., Liu, Z., Xiao, S., & Shao, Y. (2023). Making Large Language Models A Better Foundation For Dense Retrieval. arXiv preprint arXiv:2312.15503 (Describe el proceso de post-adaptación LLaRA que optimiza el preentrenamiento de codificadores base para tareas de alineación en el ecosistema BGE).
+- jinaai/jina-reranker-v3
+  - Wang, F., Li, Y., & Xiao, H. (2025). jina-reranker-v3: Last but Not Late Interaction for Listwise Document Reranking. arXiv preprint arXiv:2509.25085.
+
+### Elementos teóricos
+
+- Léxicos
+  - TF-IDF
+  - 2-Poisson model
+  - Probabilistic Relevance Framework
+- *-encoders:
+  - InfoNCE for contrastive learning
+  - Kullback-Leibler (KL) divergence
+  - pérdida de entropía cruzada binaria (BCE)
+
+### Elementos arquitectónicos y modelos
+
+- dual-encoders
+- sparse-encoders
+- cross-encoder
+- late interaction
+- XLM-RoBERTa (e5, bge-m3)
+- MCLS (Multiple CLS) (bge-m3)
+- incrustación posicional rotatoria (RoPE)
+- Aprendizaje de Representación Matryoshka (MRL) (Qwen)
+- adaptadores de baja clasificación (LoRA) (jina-embeddings-v5)
+
+## Rerankers
 
 - Rerankers:
   - Rank-Biased Centroids (rbc)
