@@ -1,11 +1,8 @@
-Perfecto, con toda esta información puedo construir el esqueleto reestructurado. Antes de presentarlo, articulo brevemente la **filosofía de la nueva estructura** para que verifiques que está alineada con tu visión:
+# Esqueleto extendido del Marco Teórico y Estado del Arte (versión reestructurada)
 
 - **Marco teórico**: contiene (a) los fundamentos atemporales del problema, (b) los paradigmas y técnicas necesarias para entender los modelos, (c) **una subsección por cada modelo concreto** que usas (presentación formal/conceptual, no exhaustiva), y (d) los fundamentos matemáticos de los algoritmos de fusión.
 - **Estado del arte**: contiene (a) MessIRve y otros benchmarks como objetos de comparación, (b) resultados publicados de los modelos del marco teórico sobre español/multilingüe (líneas base), (c) literatura específica sobre fusión de rangos en IR (incluyendo fusión léxico-semántica neuronal), (d) literatura sobre comparaciones fusión vs. reranking neuronal, (e) particularidades de español relevantes (sin backbones específicos).
 
----
-
-# Esqueleto extendido del Marco Teórico y Estado del Arte (versión reestructurada)
 
 Convenciones de nivel de detalle:
 - *Definición básica*: 1–3 párrafos, sin demostraciones.
