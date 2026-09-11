@@ -37,49 +37,6 @@
   - BAAI/bge-reranker-v2-m3
   - jinaai/jina-reranker-v3
 
-### Fuentes
-
-- BM25:
-  - S. E. Robertson, C. J. van Rijsbergen, and M. F. Porter, “Probabilistic models of indexing and searching,” in Information Retrieval Research (Proceedings of Research and Development in Information Retrieval, Cambridge, 1980), (R. N. Oddy, S. E. Robertson, C. J. van Rijsbergen, and P. W. Williams, eds.), pp. 35–56, London: Butterworths, 1981
-  - Robertson, S. E., & Walker, S. (1994). Some simple effective approximations to the 2-Poisson model for probabilistic weighted retrieval. Proceedings of the 17th Annual International ACM SIGIR Conference on Research and Development in Information Retrieval.
-  **- Robertson, S., & Zaragoza, H. (2009). The Probabilistic Relevance Framework: BM25 and Beyond. Foundations and Trends in Information Retrieval.**
-- intfloat/multilingual-e5-large-instruct
-  - **Wang, L., Yang, N., Huang, X., Yang, L., Majumder, R., & Wei, F. (2024). Multilingual E5 Text Embeddings: A Technical Report. arXiv preprint arXiv:2402.05672.**
-- BAAI/bge-m3
-  - **Chen, J., Xiao, S., Zhang, P., Luo, K., Lian, D., & Wang, J. (2024). BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation. arXiv preprint arXiv:2402.03216.**
-- Qwen/Qwen3-Embedding-0.6B
-  - **Zhang, Y., et al. (2025). Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models. arXiv preprint arXiv:2506.05176.**
-- jinaai/jina-embeddings-v5-text-small
-  - **Akram, M. K., Sturua, S., Havriushenko, N., Herreros, Q., Günther, M., Werk, M., & Xiao, H. (2026). jina-embeddings-v5-text: Task-Targeted Embedding Distillation. arXiv preprint arXiv:2602.15547.**
-- naver/splade-v3
-  - **Formal, T., Lassance, C., Piwowarski, B., & Clinchant, S. (2021). SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking. Proceedings of the 44th International ACM SIGIR Conference on Research and Development in Information Retrieval.**
-  - **Lassance, C., Déjean, H., Formal, T., & Clinchant, S. (2024). SPLADE-v3: New baselines for SPLADE. arXiv preprint arXiv:2403.06789.**
-- jinaai/jina-colbert-v2
-  - **Khattab, O., & Zaharia, M. (2020). ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT. Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval.**
-  - **Jha, R., Wang, B., Günther, M., Mastrapas, G., Sturua, S., Mohr, I., Koukounas, A., Akram, M. K., Wang, N., & Xiao, H. (2024). Jina-ColBERT-v2: A General-Purpose Multilingual Late Interaction Retriever. Proceedings of the Association for Computational Linguistics (ACL) / EMNLP 2024.**
-- BAAI/bge-reranker-v2-m3
-  - Chen, J., Xiao, S., Zhang, P., Luo, K., Lian, D., & Wang, J. (2024). BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation. arXiv preprint arXiv:2402.03216 (Presenta la arquitectura técnica del ecosistema unificado BGE M3 / Reranker-v2).
-  - Li, C., Liu, Z., Xiao, S., & Shao, Y. (2023). Making Large Language Models A Better Foundation For Dense Retrieval. arXiv preprint arXiv:2312.15503 (Describe el proceso de post-adaptación LLaRA que optimiza el preentrenamiento de codificadores base para tareas de alineación en el ecosistema BGE).
-- jinaai/jina-reranker-v3
-  - **Wang, F., Li, Y., & Xiao, H. (2025). jina-reranker-v3: Last but Not Late Interaction for Listwise Document Reranking. arXiv preprint arXiv:2509.25085.**
-
-## Rerankers
-
-- Rank-Biased Centroids (rbc)
-  - Bailey, Peter, Alistair Moffat, Falk Scholer, and Paul Thomas. "Retrieval consistency in the presence of query variations." In Proceedings of the 40th international ACM SIGIR conference on research and development in information retrieval, pp. 395-404. 2017.
-- RRF
-  - Cormack, Gordon V., Charles LA Clarke, and Stefan Buettcher. "Reciprocal rank fusion outperforms condorcet and individual rank learning methods." In Proceedings of the 32nd international ACM SIGIR conference on Research and development in information retrieval, pp. 758-759. 2009.
-- CombMNZ
-  - Fox, Edward A., and Joseph A. Shaw. "Combination of multiple searches." NIST special publication SP 243 (1994).
-- Condorcet
-  - Mark Montague and Javed A. Aslam. 2002. Condorcet fusion for improved retrieval. In Proceedings of the eleventh international conference on Information and knowledge management (CIKM '02). Association for Computing Machinery, New York, NY, USA, 538–548. https://doi.org/10.1145/584792.584881
-- BordaFuse
-  - Javed A. Aslam and Mark Montague. 2001. Models for metasearch. In Proceedings of the 24th annual international ACM SIGIR conference on Research and development in information retrieval (SIGIR '01). Association for Computing Machinery, New York, NY, USA, 276–284. https://doi.org/10.1145/383952.384007
-
-## Otras
-
-- Sebastian Bruch, Siyu Gai, and Amir Ingber. 2023. An Analysis of Fusion Functions for Hybrid Retrieval. ACM Trans. Inf. Syst. 42, 1, Article 20 (January 2024), 35 pages. https://doi.org/10.1145/3596512
-
 ## Métricas
 
 | Métrica                            | Propósito                             | Justificación en benchmarks           |
