@@ -17,6 +17,8 @@
     - Artículos utilizando MessIRve
     - MTEB y La Leaderboard
     - Comparar los resultados obtenidos con resultados en otras lenguas para todos los modelos involucrados
+  - Agregar nota sobre por qué nos limitamos a modelos 0.6B
+  - Probar gemini-embedding-001?
 
 ## Modelos
 
