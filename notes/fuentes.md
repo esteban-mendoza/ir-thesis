@@ -15,8 +15,6 @@ apoyo o antecedentes.
   → `recursos/bm25-RobertsonWalker1994.pdf`
 - Robertson, S. E., Walker, S., Jones, S., Hancock-Beaulieu, M., & Gatford, M. (1994). Okapi at TREC-3. TREC-3.
   → `recursos/bm25-RobertsonEtAl1994.pdf`
-- Robertson, S. E., & Sparck Jones, K. (1976). Relevance weighting of search terms. JASIS.
-  → `recursos/bm25-RobertsonSparckJones1976.pdf`
 
 ### Densos (dual-encoders)
 
