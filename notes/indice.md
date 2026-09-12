@@ -3,11 +3,15 @@
 > **Índice autoritativo.** Este archivo define la estructura de la tesis.
 > `notes.md` queda como notas personales de referencia (no autoritativo).
 >
-> Estado del refinamiento (*top-down*): estructura de capítulos **fijada**.
-> Los capítulos 2 (Marco teórico) y 3 (Estado del arte) tienen detalle a nivel
-> de secciones y subsecciones (pendiente de revisión). Los capítulos 1, 4, 5 y 6
-> tienen por ahora solo el nivel de secciones, tomado del protocolo y los
-> esqueletos; se refinarán en las siguientes iteraciones.
+> Estado del refinamiento (*top-down*):
+> - Nivel 0 (capítulos): **fijado** — 6 capítulos, sin fusiones.
+> - Nivel 1 (secciones): **fijado** — caps. 2 y 3 reorganizados y podados
+>   (7→5 secciones c/u), cap. 4 con una fusión (5→4), cap. 5 definido
+>   (4 bloques por experimento + análisis transversal), caps. 1 y 6 sin cambios.
+> - Nivel 2 (subsecciones): **fijado** para caps. 2 (34→14) y 3 (29→12).
+>   Caps. 1, 5 y 6: secciones planas, sin subsecciones. Cap. 4: subsecciones solo
+>   en §4.4 (los cuatro experimentos).
+> - Nivel 3 (bullets por subsección): **fijado** para los seis capítulos.
 
 ## Estructura de capítulos
 
@@ -25,113 +29,225 @@ Sin apéndices por ahora. Se podrán añadir en el futuro y se mantendrán al m�
 ## 1. Introducción
 
 1. Motivación
+   - RI neuronal dominada por el inglés; el español desatendido
+   - Rerankers efectivos pero costosos; la fusión de rangos como alternativa sin cómputo neuronal adicional
+   - MessIRve habilita la evaluación nativa en español
 2. Objetivos
+   - Objetivo general y los seis objetivos específicos del protocolo, cada uno mapeado a su capítulo/experimento
 3. Hipótesis
+   - Una hipótesis por pregunta de investigación, derivadas del protocolo
 4. Preguntas de investigación
+   - Las cuatro (P1–P4), mapeadas a los experimentos E1–E4
 5. Contribución
+   - Evidencia sistemática de fusión de rangos en español
+   - Comparación de seis algoritmos de fusión
+   - Análisis de complementariedad léxico-semántica
+   - Sistema abierto y reproducible
 6. Organización de la tesis
+   - Un párrafo por capítulo
 
 ## 2. Marco teórico
 
+Organizado por etapa del pipeline de recuperación. Podas acordadas respecto a la
+versión anterior: se eliminan «Embeddings guiados por instrucciones», «Búsqueda
+eficiente (ANN/HNSW/IVF)», la sección puente «Funciones de puntuación» (absorbida
+por §2.4) y «Aprendizaje de representaciones» como sección (solo menciones donde
+el argumento lo requiera). BM25 y SPLADE comparten sección (§2.2).
+
 1. Fundamentos de recuperación de información
-   1. Definiciones canónicas (consulta, documento, corpus, ranking)
-   2. Principio de Ordenación por Probabilidad (PRP)
-   3. Equivalencia de rango bajo transformaciones monótonas
-2. Modelos léxicos: fundamentos
-   1. Modelo de espacio vectorial y TF-IDF
-   2. Modelo de Independencia Binaria (BIM) y peso RSJ
-   3. Restricción al espacio de la consulta
-   4. Modelo de Elitismo (2-Poisson) y saturación
-   5. Normalización por longitud
-   6. Formulación canónica de BM25
-   7. Pseudo-Relevance Feedback (conceptual)
-3. Representaciones vectoriales del lenguaje
-   1. Hipótesis distribucional y embeddings estáticos
-   2. Arquitectura Transformer (encoder bidireccional vs decoder causal)
-   3. Embeddings contextuales y estrategias de pooling (mean/CLS vs EOS/last-token)
-   4. Embeddings guiados por instrucciones
-4. Paradigmas de modelos neuronales para IR
-   1. Codificadores duales densos
-   2. Codificadores dispersos neuronales
-   3. Cross-encoders
-   4. Modelos de interacción tardía (operador MaxSim)
-   5. Funciones de puntuación: propiedades matemáticas y motivación de la fusión [SUBSECCIÓN PUENTE CLAVE]
-5. Aprendizaje de representaciones
-   1. Funciones de pérdida contrastivas (InfoNCE canónica + variantes)
-   2. Fine-tuning y aproximaciones de bajo rango (LoRA + hard negative mining)
-   3. Representaciones jerárquicas y truncables (MRL)
-   4. Destilación de conocimiento en IR [NUEVA] (KL, MarginMSE, multi-teacher, self-distillation)
-6. Fundamentos matemáticos de la fusión de rangos
-   1. Formalización: rankings, score-fusion vs rank-fusion, analogía con teoría de elección social
-   2. Métodos basados en puntuaciones (CombSUM, CombMNZ, normalización min-max/z-score)
-   3. Métodos posicionales basados en rangos (Borda, Borda ponderado, Borda como modelo de usuario uniforme)
-   4. Métodos mayoritarios (Condorcet, grafos semicompletos, componentes fuertemente conexas)
-   5. Métodos probabilísticos y modelos de usuario (Bayes-fuse, modelo de profundidad estocástica, RBC)
-   6. Fusión recíproca amortiguada (RRF y análisis de k)
-7. Evaluación en recuperación de información
-   1. Métricas estándar (P@k, R@k, MAP, MRR, nDCG)
-   2. Variantes bajo juicios incompletos (nDCG*)
-   3. Similitud entre listas de ranking (Kendall τ vs RBO)
-   4. Búsqueda eficiente: ANN, HNSW, IVF, búsqueda multi-vector
-   5. Pruebas de significancia estadística
+   1. El problema de la recuperación de información
+      - Definición informal: consulta + corpus → ranking de documentos
+      - Definiciones formales: consulta, documento, corpus, relevancia, ranking como permutación
+      - El sistema de RI como función de puntuación y el orden que induce
+      - Relevancia binaria vs. graduada (anticipo para §2.5)
+   2. El principio de ordenación por probabilidad (PRP)
+      - Enunciado: ordenar por P(relevante | d, q) es óptimo bajo sus supuestos
+      - Consecuencia: los modelos de RI como estimadores (puente hacia el BIM)
+2. Modelos de recuperación de primera etapa
+   1. Modelos léxicos probabilísticos: del BIM a BM25
+      - Bolsa de palabras y TF-IDF como heurística clásica
+      - BIM y peso RSJ: derivación desde el PRP
+      - 2-Poisson: saturación de la frecuencia de término
+      - Normalización por longitud del documento
+      - BM25 canónico: fórmula final, papel de k₁ y b
+   2. Representaciones dispersas aprendidas (SPLADE)
+      - Misma idea que BM25 (vector sobre el vocabulario) con pesos aprendidos
+      - SPLADE: proyección sobre vocabulario vía MLM, expansión aprendida, regularización de dispersión
+      - Lectura conceptual: «BM25 aprendido» → léxico moderno de esta tesis
+   3. Representaciones densas y codificadores duales
+      - Hipótesis distribucional; de embeddings estáticos a contextuales
+      - Tokenización y autoatención: lo mínimo del Transformer (encoder bidireccional)
+      - Codificador dual: definición formal (dos torres + similitud), pooling
+      - Qué captura lo semántico frente a lo léxico (motiva la complementariedad)
+      - Mención breve: variantes guiadas por instrucciones (mE5-instruct) y entrenamiento contrastivo (InfoNCE)
+   4. Interacción tardía (MaxSim)
+      - Representación multi-vector: un vector por token
+      - Definición formal del operador MaxSim
+      - Punto intermedio: más fino que denso, más barato que cross-encoder
+3. Reordenamiento neuronal
+   1. La arquitectura en cascada: recuperación y reordenamiento
+      - Por qué en etapas: el costo prohíbe aplicar modelos pesados a todo el corpus
+      - Primera etapa (recall) vs. segunda etapa (precisión); el recall inicial como cota
+   2. Cross-encoders
+      - Definición: consulta y documento concatenados, puntuación conjunta
+      - Interacción completa → más precisión; costo por par → no escala
+      - Taxonomía pointwise / pairwise / listwise (listwise enlaza al cap. 3)
+4. Fusión de rangos
+   1. Formalización
+      - Ranking como permutación; notación formal
+      - Equivalencia de rango bajo transformaciones monótonas → justifica la fusión de rangos
+      - Fusión de puntuaciones vs. de rangos: el problema de las escalas incompatibles
+      - Analogía con teoría de elección social (sistemas = votantes, documentos = candidatos)
+   2. Métodos basados en puntuaciones (CombMNZ)
+      - Normalización de puntuaciones como prerrequisito
+      - CombSUM y CombMNZ; el factor MNZ que premia la presencia en varias listas
+   3. Métodos posicionales (BordaFuse, RRF, ISR)
+      - BordaFuse: puntos por posición, conexión con el conteo de Borda
+      - RRF: 1/(k+r), papel del parámetro k
+      - ISR (Inverse Square Rank): definición (peso 1/r²) y propiedades
+   4. Comparaciones por pares y modelos de usuario (Condorcet, RBC)
+      - Condorcet: mayoría por pares, grafo de preferencias y manejo de ciclos
+      - RBC (Rank-Biased Centroids): modelo de usuario con profundidad de escaneo; fusión como utilidad esperada
+5. Evaluación en recuperación de información
+   1. Métricas de evaluación
+      - P@k y Recall@k: precisión y cobertura a profundidad fija
+      - MAP y MRR
+      - nDCG: ganancia graduada con descuento; por qué es la métrica primaria
+   2. Pruebas de significancia estadística
+      - El problema: promedios de métrica vs. variabilidad por consulta
+      - Permutación / bootstrap / t pareada; corrección por comparaciones múltiples
 
 ## 3. Estado del arte
 
-1. Modelos léxicos modernos y variantes de BM25
-   1. Okapi BM25 y BM25F
-   2. PRF y expansión de consulta
-   3. Variantes modernas (BM25+, BM25L, BM25-Adaptive)
-   4. Infraestructura (Anserini, Pyserini)
-2. Modelos semánticos representativos
-   1. Dense bi-encoders multilingües (mDPR → mContriever → mE5 → mE5-instruct → Qwen3-Embedding → jina-v5)
-   2. Modelos multifuncionales (BGE-M3) [con párrafo dedicado a fusión interna como anticipación de §3.4]
-   3. Sparse encoders (SparTerm → SPLADE v1 → SPLADE-v3)
-   4. Late interaction (ColBERT v1 → ColBERTv2 → Jina-ColBERT-v2)
-   5. [Cierre narrativo] Convergencia hacia modelos unificados: ¿queda espacio para la fusión externa?
-3. Modelos de reranking neuronal
-   1. Cross-encoders pointwise/pairwise (monoBERT, monoT5, RankT5, bge-reranker-v2-m3)
-   2. Listwise rerankers con LLMs (RankGPT, RankZephyr, jina-reranker-v3 LBNL)
-   3. Cascadas y trade-offs efectividad/eficiencia
-4. Estrategias de fusión y reranking en la literatura
-   1. Fusión score-based clásica (CombSUM, CombMNZ; Fox & Shaw 1994)
-   2. Fusión rank-based posicional (Borda-fuse, Bayes-fuse; Aslam & Montague 2001)
-   3. Fusión rank-based mayoritaria (Condorcet-fuse; Montague & Aslam 2002)
-   4. Fusión rank-based score-agnostic (RRF; Cormack 2009)
-   5. Fusión rank-based con modelo de usuario (RBC; Bailey et al. 2017)
-   6. Fusión léxico-semántica en la era neuronal [SECCIÓN CRÍTICA NUEVA] (Karpukhin 2020; Luan et al. 2021; Bruch et al. 2023; Lin et al. 2021; análisis crítico de cuándo la fusión aporta y cuándo no)
-   7. Fusión interna del modelo vs fusión externa de listas (BGE-M3 como caso de estudio)
-5. Benchmarks de IR
-   1. Históricos (TREC, LETOR)
-   2. MS MARCO y derivados
-   3. Multilingües (BEIR, MIRACL, Mr.TyDi, MTEB Multilingual)
-   4. Robustez y consistencia (UQV100)
-   5. MessIRve
-6. Particularidades del español en IR
-   1. Tipología morfosintáctica y efectos sobre BM25
-   2. Backbones específicos (BETO, RoBERTa-bne, MARIA)
-   3. Resultados desglosados de modelos del §3.2 en español
-   4. Variedades dialectales y MessIRve (rioplatense)
-   5. Translationese: mMARCO-es vs MIRACL-es vs nativo
-7. [OPCIONAL] Posicionamiento de esta tesis: síntesis de los gaps identificados que la tesis aborda
+Secciones alineadas con los cuatro experimentos. Podas acordadas: «Benchmarks» y
+«Particularidades del español» se fusionan (§3.4); el posicionamiento deja de ser
+opcional (§3.5).
+
+1. Líneas base de recuperación: de BM25 a los modelos neuronales modernos
+   1. Modelos léxicos: BM25 y variantes modernas
+      - Okapi BM25 como línea base omnipresente en benchmarks
+      - Variantes (BM25+, BM25L): qué deficiencia corrige cada una
+      - Infraestructura reproducible: Anserini/Pyserini (mención)
+   2. Codificadores duales multilingües
+      - Línea evolutiva: mDPR → mContriever → mE5 → mE5-instruct
+      - Generación reciente: Qwen3-Embedding, jina-embeddings-v5
+      - Qué reportan en multilingüe y en español (MIRACL, MTEB)
+      - Cierre: criterio de selección de los modelos de esta tesis
+   3. Modelos multifuncionales y dispersos aprendidos (BGE-M3, SPLADE)
+      - SPLADE: v1 → v3, qué mejora cada versión y resultados reportados
+      - BGE-M3: denso + disperso + multi-vector en un solo modelo
+      - Anticipación de la fusión interna (enlaza con §3.3.3)
+   4. Interacción tardía (de ColBERT a jina-colbert-v2)
+      - ColBERT: la propuesta original de interacción tardía
+      - ColBERTv2: compresión y destilación
+      - jina-colbert-v2: variante multilingüe; resultados reportados
+2. Reordenamiento neuronal en la literatura
+   1. Cross-encoders (monoBERT, monoT5, bge-reranker-v2-m3)
+      - monoBERT y monoT5: reranking punto a punto con Transformers
+      - bge-reranker-v2-m3: el cross-encoder multilingüe de esta tesis
+      - Efectividad reportada y costo computacional
+   2. Rerankers listwise con LLMs (RankGPT, jina-reranker-v3)
+      - RankGPT/RankZephyr: reranking como generación de ordenaciones
+      - jina-reranker-v3: el listwise de esta tesis
+      - Cierre de la sección: trade-offs efectividad/eficiencia en la cascada
+3. Fusión de rangos en la literatura
+   1. Los métodos clásicos
+      - Fox & Shaw 1994: CombSUM/CombMNZ en TREC
+      - Aslam & Montague 2001: Borda-fuse (y Bayes-fuse)
+      - Montague & Aslam 2002: Condorcet-fuse
+      - Cormack et al. 2009: RRF
+      - Bailey et al. 2017: RBC
+      - Hallazgo transversal: la fusión suele superar a los componentes individuales
+   2. Fusión léxico-semántica en la era neuronal
+      - Karpukhin et al. 2020 (DPR): el denso supera a BM25, pero la combinación ayuda
+      - Luan et al. 2021: combinaciones sparse/dense
+      - Bruch et al. 2023 y Lin et al. 2021: análisis de cuándo aporta la fusión
+      - Síntesis crítica: condiciones bajo las que la fusión léxico-semántica ayuda y cuándo no
+   3. Fusión interna del modelo vs. fusión externa de listas (BGE-M3)
+      - BGE-M3 como caso de estudio de fusión interna
+      - Qué pierde la fusión interna frente a fusionar listas de sistemas especializados
+      - Motivación directa de las preguntas de investigación de la tesis
+4. Benchmarks de IR y el español
+   1. De TREC a MS MARCO y BEIR
+      - TREC: pooling y juicios incompletos
+      - MS MARCO: escala web
+      - BEIR: evaluación *zero-shot* heterogénea
+   2. Benchmarks multilingües y particularidades del español
+      - MIRACL, Mr. TyDi, MTEB Multilingual: cobertura del español
+      - Morfología del español y sus efectos en modelos léxicos y tokenización
+      - Backbones en español (BETO, RoBERTa-bne, MARIA): mención
+      - *Translationese*: mMARCO-es vs. MIRACL-es vs. datos nativos
+   3. MessIRve
+      - Descripción: origen, tamaño, variedades dialectales del español (incl. rioplatense)
+      - Qué lo distingue: consultas nativas, no traducidas
+      - Resultados previos reportados (incluidas las líneas base propietarias)
+5. Posicionamiento de esta tesis
+   - Gap 1: la fusión se evalúa sobre todo en inglés; falta evidencia sistemática en español
+   - Gap 2: no hay comparación sistemática de algoritmos de fusión frente a rerankers modernos
+   - Gap 3: abiertos vs. propietarios sin resolver en español
+   - Puente al cap. 4: los cuatro experimentos responden a estos gaps
 
 ## 4. Metodología
 
+«Arquitectura del sistema» y «Modelos de recuperación base» se fusionan en §4.2.
+
 1. El conjunto de datos MessIRve
-2. Arquitectura del sistema de recuperación
-3. Modelos de recuperación base
-4. Algoritmos de fusión
-5. Diseño experimental
+   - Cifras: consultas, documentos, juicios, variedades dialectales
+   - Distribución de relevantes por consulta (pendiente en notes.md; justifica la batería de métricas)
+   - Partición usada (entrenamiento/prueba por artículo de Wikipedia; restricciones del conjunto de prueba)
+2. Sistema de recuperación
+   - Arquitectura del pipeline: primera etapa + fusión + reordenamiento (figura)
+   - Configuración de cada modelo base; nota sobre el límite de 0.6B
+   - Rerankers y profundidad de reordenamiento
+   - Implementación y reproducibilidad (ir-spanish, hardware, semillas)
+3. Algoritmos de fusión
+   - Los seis con sus parámetros: CombMNZ, BordaFuse, Condorcet, RRF, ISR (Inverse Square Rank), RBC (Rank-Biased Centroids)
+   - Qué listas se fusionan y profundidad de corte
+   - Normalización de puntuaciones para CombMNZ
+4. Diseño experimental
+   - Protocolo común: métricas (nDCG@10 primaria; Recall@100, MRR@10, MAP, P@10/50) y pruebas de significancia
    1. Experimento 1: fusión vs. modelos individuales
+      - Cada fusión vs. cada modelo individual
    2. Experimento 2: comparación de algoritmos de fusión
-   3. Experimento 3: algoritmos de fusión vs. reordenamiento neuronal
+      - Comparación cruzada de los seis algoritmos, por métrica y por familia
+   3. Experimento 3: fusión vs. reordenamiento neuronal
+      - Mejor fusión vs. ambos rerankers, con análisis de eficiencia
    4. Experimento 4: modelos abiertos vs. propietarios
+      - Sistemas de la tesis vs. líneas base propietarias reportadas en MessIRve
 
 ## 5. Resultados experimentales
 
-_(Por definir; a refinar en la siguiente iteración. Estructura tentativa: un bloque de resultados por experimento, más un análisis de complementariedad léxico-semántica.)_
+Un bloque por experimento, más el análisis de complementariedad (§5.5, objetivo
+específico 6 del protocolo). Secciones planas, sin subsecciones.
+
+1. Experimento 1: fusión vs. modelos individuales
+   - Tabla principal de modelos base y fusiones
+   - Qué fusiones superan a qué modelos, con significancia
+   - Lectura por familia (léxico vs. semántico)
+2. Experimento 2: comparación de algoritmos de fusión
+   - Tabla comparativa de los seis algoritmos
+   - Ranking de algoritmos y diferencias significativas
+   - Sensibilidad a parámetros (k de RRF) si aplica
+3. Experimento 3: fusión vs. reordenamiento neuronal
+   - Tabla: mejor fusión vs. rerankers
+   - Costo/beneficio: relevancia ganada vs. costo
+   - Significancia
+4. Experimento 4: modelos abiertos vs. propietarios
+   - Tabla vs. líneas base propietarias
+   - Posición relativa alcanzada
+5. Análisis de complementariedad léxico-semántica
+   - Medida de complementariedad: RBO (Rank-Biased Overlap; Webber, Moffat y Zobel, 2010) — misma familia de pesos que RBC
+   - Por qué no Kendall τ: exige listas conjuntas y no pondera por profundidad; RBO admite listas no conjuntas (lo habitual entre familias) y pondera el tope
+   - Consultas donde gana cada familia, con ejemplos
+   - Relación entre complementariedad y ganancia de fusión (responde al objetivo específico 6)
 
 ## 6. Conclusiones y trabajo futuro
 
 1. Conclusiones finales
+   - Respuesta a P1–P4, una por una, con la evidencia obtenida
 2. Contribuciones del trabajo
+   - Recuento de lo entregado, mapeado a §1.5
 3. Trabajo futuro
+   - Más benchmarks en español
+   - Fusión ponderada o aprendida
+   - Análisis de eficiencia más fino
