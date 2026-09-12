@@ -19,6 +19,13 @@ Protocolo obligatorio para todo agente:
 
 ---
 
+## 2026-09-12 — Cap. 4: plan de párrafos (nivel 4) en capitulo4.tex
+- **Cambios:** `tesis/capitulos/capitulo4.tex` — añadido el nivel 4 (plan párrafo-por-párrafo) como comentarios `% P<n>:` bajo cada (sub)sección, conservando las viñetas de nivel 3 espejo del índice. `AGENTS.md` — documentada la convención en «Dónde vive el plan». Esta entrada en el changelog.
+- **Decisiones:** el nivel 4 vive en cada archivo `.tex` para no contaminar `notes/indice.md`; una línea `% P<n>:` por párrafo que indica qué debe cubrir y qué valores/citas/tablas/figuras insertar, con marcadores `[PENDIENTE: …]` para lo que falta. Desglose: §4.1 (4 párrafos), §4.2 (5), §4.3 (3), §4.4 protocolo común (4), E1/E2/E4 (1 c/u), E3 (2). Valores anclados a `ir-spanish/`: top-100 por modelo en primera etapa, semilla 42, RRF k=60 (default de ranx), ~100 candidatos al reranking, hardware 2× RTX A5000 de 24 GB.
+- **Estado / pendientes:** el usuario redacta los párrafos. Pendientes señalados en las notas: distribución de relevantes por consulta (§4.1), Fig. 4.1 del pipeline (§4.2), normalización exacta usada antes de CombMNZ (ver `ir-spanish/rerankers/fuse.py`), medida de eficiencia del E3, entradas de Urbano et al. (2019) y Smucker et al. (2007) en `biblio.bib`, y precisar si E3 incluye jina-colbert-v2.
+
+---
+
 ## 2026-09-12 — Índice: protocolo de significancia estadística definido
 - **Cambios:** `tesis/notes/indice.md` — §2.5.2 (marco) con cinco viñetas sobre pruebas de significancia; §4.4 desglosa el protocolo de evaluación (métricas, prueba, justificación, comparaciones múltiples); §4.4.4 y §5.4 marcan el E4 como comparación descriptiva sin prueba; §5.2 referencia Tukey HSD. Comentarios de `capitulos/capitulo2.tex`, `capitulo4.tex` y `capitulo5.tex` re-sincronizados con el índice.
 - **Decisiones:** prueba principal = **t pareada (Student) de dos colas, α = 0.05** para las hipótesis de efectividad media; **test de permutación** como alternativa robusta (ambas disponibles en `ranx.compare`). Justificación: Urbano et al. (2019) como fuente principal, Smucker et al. (2007) como antecedente. Comparaciones múltiples con **Tukey HSD** (E2). E4 queda como **comparación descriptiva** (los sistemas propietarios no publican puntuaciones por consulta).

@@ -6,17 +6,29 @@ En este capítulo se describe el marco metodológico de este trabajo de tesis.
 % - Cifras: consultas, documentos, juicios, variedades dialectales
 % - Distribución de relevantes por consulta (pendiente en notes.md; justifica la batería de métricas)
 % - Partición usada (entrenamiento/prueba por artículo de Wikipedia; restricciones del conjunto de prueba)
+% P1: Qué es MessIRve y de dónde sale: consultas reales de usuarios (obtenidas con la API de autocompletado de Google) emparejadas con pasajes de la Wikipedia en español; quién lo publicó, con cita al artículo del dataset (ver notes/fuentes.md). Cerrar con por qué es el conjunto adecuado para esta tesis: español nativo, no traducido (contraste con el «translationese» de mMARCO-es; remite a §3.4).
+% P2: Cifras del conjunto: ~700 000 consultas; tamaño del corpus eswiki_20240401 (párrafos de la Wikipedia en español, volcado de abril de 2024); número de juicios de relevancia y su escala [verificar en el artículo si son binarios o graduados]; variedades dialectales cubiertas. [Considerar una tabla resumen del conjunto de datos.]
+% P3: Distribución del número de documentos relevantes por consulta: media, mediana y percentiles [PENDIENTE: calcular, cf. ir-spanish/analysis/]. Explicar cómo esta distribución justifica la batería de métricas adoptada en §4.4 (en particular Recall@100 y P@50).
+% P4: Partición utilizada: 80 % entrenamiento / 20 % prueba, dividida por artículo de Wikipedia; restricciones del conjunto de prueba (match_score = 1, expanded_search = False). Declarar que todos los experimentos del cap. 5 se evalúan exclusivamente sobre esta partición de prueba.
 
 \section{Sistema de recuperación}\label{sec:metodologia-sistema}
 % - Arquitectura del pipeline: primera etapa + fusión + reordenamiento (figura)
 % - Configuración de cada modelo base; nota sobre el límite de 0.6B
 % - Rerankers y profundidad de reordenamiento
 % - Implementación y reproducibilidad (ir-spanish, hardware, semillas)
+% P1: Arquitectura del pipeline en tres etapas (recuperación de primera etapa, fusión de rangos, reordenamiento neuronal) y el recorrido de una consulta por ellas; referenciar la figura del pipeline [PENDIENTE: Fig. 4.1]. Enlazar con la arquitectura en cascada del marco teórico (§2.3): la primera etapa maximiza el recall y acota lo que las etapas posteriores pueden recuperar.
+% P2: Los seis modelos de primera etapa: BM25 (léxico); multilingual-e5-large-instruct, BGE-M3, Qwen3-Embedding-0.6B y jina-embeddings-v5-text-small (densos); SPLADE-v3 (disperso aprendido). Tabla de configuración: identificador en Hugging Face, tipo, número de parámetros y longitud máxima de contexto [valores en ir-spanish/README.md y baselines/]. Incluir la nota sobre el límite de ~0.6B parámetros por restricciones de hardware.
+% P3: Detalles de la primera etapa: indexación y búsqueda de BM25 con Pyserini; búsqueda exacta de vecinos más cercanos con FAISS (GPU) para los modelos densos; búsqueda dispersa para SPLADE. Profundidad de corte: top-100 por modelo. Semilla 42 en todos los scripts.
+% P4: Los rerankers: bge-reranker-v2-m3 (cross-encoder), jina-reranker-v3 (listwise) y jina-colbert-v2 (interacción tardía). Precisar sobre qué lista se aplican y con qué profundidad de reordenamiento (~100 candidatos por consulta; verificar en ir-spanish/rerankers/ si parten del run de un solo modelo o de la lista fusionada).
+% P5: Implementación y reproducibilidad: repositorio ir-spanish; pila de software (ranx para fusión, métricas y pruebas; sentence-transformers; pyserini; datasets; faiss-gpu); hardware (2 × NVIDIA RTX A5000 de 24 GB, CUDA 12.2); semillas fijadas [verificar si el repositorio será público y añadir la URL].
 
 \section{Algoritmos de fusión}\label{sec:metodologia-fusion}
 % - Los seis con sus parámetros: CombMNZ, BordaFuse, Condorcet, RRF, ISR (Inverse Square Rank), RBC (Rank-Biased Centroids)
 % - Qué listas se fusionan y profundidad de corte
 % - Normalización de puntuaciones para CombMNZ
+% P1: Qué listas se fusionan: las seis listas de primera etapa (top-100 por consulta de cada modelo) y la profundidad de corte de la lista fusionada que se evalúa. La notación remite a la formalización del marco teórico (§2.4.1).
+% P2: Los seis algoritmos con los parámetros utilizados: CombMNZ, BordaFuse, Condorcet, RRF (k = 60), ISR y RBC (φ con el valor por defecto de ranx). Tabla resumen: algoritmo, tipo y parámetros. Las fórmulas y propiedades van en §2.4; aquí solo la configuración. Mencionar la implementación con ranx (métodos mnz, bordafuse, condorcet, rrf, isr, rbc).
+% P3: Normalización de puntuaciones previa a CombMNZ: cuál se aplicó [verificar en ir-spanish/rerankers/fuse.py] y por qué es necesaria (escalas de puntuación incompatibles entre sistemas; remite a §2.4.2).
 
 \section{Diseño experimental}\label{sec:metodologia-diseno}
 % - Protocolo común de evaluación:
@@ -24,16 +36,25 @@ En este capítulo se describe el marco metodológico de este trabajo de tesis.
 %   - Prueba de significancia: t pareada (Student) de dos colas, α = 0.05, para las hipótesis de efectividad media; test de permutación como alternativa robusta (ambos en ranx.compare)
 %   - Justificación de la elección: Urbano et al. (2019) — t y permutación mantienen el error tipo I nominal, bootstrap sesgado, Wilcoxon y signo poco fiables; Smucker et al. (2007) como antecedente
 %   - Comparaciones múltiples: Tukey HSD para la comparación cruzada de los seis algoritmos (E2)
+% P1: Protocolo común: la unidad de análisis es la consulta del conjunto de prueba; cada sistema produce puntuaciones por consulta y se reportan promedios sobre consultas. Métricas: nDCG@10 (primaria), Recall@100, MRR@10, MAP y P@{10, 50}; las definiciones formales remiten a §2.5.1.
+% P2: Prueba de significancia: t pareada de Student de dos colas con α = 0.05 para las hipótesis de efectividad media, con la prueba de permutación como alternativa robusta (ambas en ranx.compare). Justificar la elección con Urbano et al. (2019): t y permutación mantienen el error tipo I nominal, bootstrap está sesgado hacia p-valores pequeños y Wilcoxon/signo son poco fiables para diferencias de medias; Smucker et al. (2007) como antecedente [PENDIENTE: entradas de ambos en biblio.bib].
+% P3: Comparaciones múltiples: corrección con Tukey HSD en la comparación cruzada de los seis algoritmos (E2); aclarar por qué E1 y E3 no la requieren (o qué corrección se aplica en su caso) y que E4 queda descriptivo.
+% P4: Convenciones de reporte del cap. 5: mejor valor por columna en negrita, marcadores de significancia estadística y una tabla principal por experimento.
 
 \subsection{Experimento 1: fusión vs. modelos individuales}\label{subsec:metodologia-e1}
 % - Cada fusión vs. cada modelo individual
+% P1: Indicar que responde a la pregunta de investigación P1. Diseño: cada una de las seis fusiones contra cada modelo individual sobre las mismas consultas, con la prueba pareada del protocolo común; la hipótesis es que la fusión supera al mejor modelo individual en nDCG@10. Los resultados se reportan en §5.1.
 
 \subsection{Experimento 2: comparación de algoritmos de fusión}\label{subsec:metodologia-e2}
 % - Comparación cruzada de los seis algoritmos, por métrica y por familia
+% P1: Responde a P2. Diseño: comparación cruzada de los seis algoritmos de fusión sobre las mismas listas de entrada, por métrica y por familia de métodos (basados en puntuaciones, posicionales y por pares), con Tukey HSD. Los resultados se reportan en §5.2.
 
 \subsection{Experimento 3: fusión vs. reordenamiento neuronal}\label{subsec:metodologia-e3}
 % - Mejor fusión vs. ambos rerankers, con análisis de eficiencia
+% P1: Responde a P3. Diseño: la mejor fusión según el E2 contra los rerankers neuronales (bge-reranker-v2-m3 y jina-reranker-v3; precisar si también entra jina-colbert-v2) sobre el mismo conjunto de candidatos, con la misma prueba de significancia. Los resultados se reportan en §5.3.
+% P2: Análisis de eficiencia: comparar el costo de la fusión (cómputo sobre listas, sin inferencia neuronal) contra el de los rerankers (inferencia por par consulta-documento); precisar la medida de costo utilizada [PENDIENTE: definir cómo se midió la eficiencia en ir-spanish/].
 
 \subsection{Experimento 4: modelos abiertos vs. propietarios}\label{subsec:metodologia-e4}
 % - Sistemas de la tesis vs. líneas base propietarias reportadas en MessIRve
 % - Comparación descriptiva con valores reportados (sin prueba de significancia: los sistemas propietarios no publican puntuaciones por consulta)
+% P1: Responde a P4. Diseño: comparación de los sistemas de la tesis contra las líneas base propietarias reportadas en el artículo de MessIRve (p. ej. text-embedding-3-large de OpenAI). Comparación descriptiva con los valores publicados — sin prueba de significancia, porque no hay puntuaciones por consulta — y posición relativa alcanzada. Los resultados se reportan en §5.4.
