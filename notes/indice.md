@@ -114,8 +114,11 @@ el argumento lo requiera). BM25 y SPLADE comparten sección (§2.2).
       - MAP y MRR
       - nDCG: ganancia graduada con descuento; por qué es la métrica primaria
    2. Pruebas de significancia estadística
-      - El problema: promedios de métrica vs. variabilidad por consulta
-      - Permutación / bootstrap / t pareada; corrección por comparaciones múltiples
+      - El problema: promedios de métrica vs. variabilidad por consulta; comparaciones pareadas por consulta
+      - Los cinco candidatos: t pareada, Wilcoxon, signo, bootstrap y permutación (randomization)
+      - Evidencia empírica consolidada: t pareada y permutación mantienen el error tipo I nominal; bootstrap sesgado hacia p-valores pequeños; Wilcoxon y signo poco fiables para diferencias de medias (anticipa la elección del cap. 4)
+      - Errores tipo I, II y III; pruebas de una y dos colas
+      - Corrección por comparaciones múltiples (Bonferroni / Tukey HSD)
 
 ## 3. Estado del arte
 
@@ -205,7 +208,11 @@ opcional (§3.5).
    - Qué listas se fusionan y profundidad de corte
    - Normalización de puntuaciones para CombMNZ
 4. Diseño experimental
-   - Protocolo común: métricas (nDCG@10 primaria; Recall@100, MRR@10, MAP, P@10/50) y pruebas de significancia
+   - Protocolo común de evaluación:
+     - Métricas: nDCG@10 primaria; Recall@100, MRR@10, MAP, P@10/50
+     - Prueba de significancia: t pareada (Student) de dos colas, α = 0.05, para las hipótesis de efectividad media; test de permutación como alternativa robusta (ambos en ranx.compare)
+     - Justificación de la elección: Urbano et al. (2019) — t y permutación mantienen el error tipo I nominal, bootstrap sesgado, Wilcoxon y signo poco fiables; Smucker et al. (2007) como antecedente
+     - Comparaciones múltiples: Tukey HSD para la comparación cruzada de los seis algoritmos (E2)
    1. Experimento 1: fusión vs. modelos individuales
       - Cada fusión vs. cada modelo individual
    2. Experimento 2: comparación de algoritmos de fusión
@@ -214,6 +221,7 @@ opcional (§3.5).
       - Mejor fusión vs. ambos rerankers, con análisis de eficiencia
    4. Experimento 4: modelos abiertos vs. propietarios
       - Sistemas de la tesis vs. líneas base propietarias reportadas en MessIRve
+      - Comparación descriptiva con valores reportados (sin prueba de significancia: los sistemas propietarios no publican puntuaciones por consulta)
 
 ## 5. Resultados experimentales
 
@@ -226,7 +234,7 @@ específico 6 del protocolo). Secciones planas, sin subsecciones.
    - Lectura por familia (léxico vs. semántico)
 2. Experimento 2: comparación de algoritmos de fusión
    - Tabla comparativa de los seis algoritmos
-   - Ranking de algoritmos y diferencias significativas
+   - Ranking de algoritmos y diferencias significativas (Tukey HSD, §4.4)
    - Sensibilidad a parámetros (k de RRF) si aplica
 3. Experimento 3: fusión vs. reordenamiento neuronal
    - Tabla: mejor fusión vs. rerankers
@@ -235,6 +243,7 @@ específico 6 del protocolo). Secciones planas, sin subsecciones.
 4. Experimento 4: modelos abiertos vs. propietarios
    - Tabla vs. líneas base propietarias
    - Posición relativa alcanzada
+   - Sin prueba de significancia (comparación descriptiva con valores reportados)
 5. Análisis de complementariedad léxico-semántica
    - Medida de complementariedad: RBO (Rank-Biased Overlap; Webber, Moffat y Zobel, 2010) — misma familia de pesos que RBC
    - Por qué no Kendall τ: exige listas conjuntas y no pondera por profundidad; RBO admite listas no conjuntas (lo habitual entre familias) y pondera el tope

@@ -76,6 +76,8 @@ apoyo o antecedentes.
   → `recursos/fusion-BruchEtAl2023.pdf`
 - Tyomkin, L., & Kurland, O. (2023). Revisiting Condorcet Fusion. ICTIR '23. doi:10.1145/3578337.3605140
   → `recursos/condorcet-TyomkinKurland2023.pdf`
+- **Urbano, J., Lima, H., & Hanjalic, A. (2019). Statistical Significance Testing in Information Retrieval: An Empirical Analysis of Type I, Type II and Type III Errors. SIGIR '19. doi:10.1145/3331184.3331259**
+  → `recursos/significancia-UrbanoEtAl2019.pdf`
 - Smucker, M. D., Allan, J., & Carterette, B. (2007). A Comparison of Statistical Significance Tests for Information Retrieval Evaluation. CIKM '07. doi:10.1145/1321440.1321528
   → `recursos/significancia-SmuckerEtAl2007.pdf`
 - Whiteley, N., Gray, A., & Rubin-Delanchy, P. (2026). Statistical exploration of the manifold hypothesis. J. R. Stat. Soc. Ser. B, 88, 353–385. doi:10.1093/jrsssb/qkag055

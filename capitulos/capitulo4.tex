@@ -19,7 +19,11 @@ En este capítulo se describe el marco metodológico de este trabajo de tesis.
 % - Normalización de puntuaciones para CombMNZ
 
 \section{Diseño experimental}\label{sec:metodologia-diseno}
-% - Protocolo común: métricas (nDCG@10 primaria; Recall@100, MRR@10, MAP, P@10/50) y pruebas de significancia
+% - Protocolo común de evaluación:
+%   - Métricas: nDCG@10 primaria; Recall@100, MRR@10, MAP, P@10/50
+%   - Prueba de significancia: t pareada (Student) de dos colas, α = 0.05, para las hipótesis de efectividad media; test de permutación como alternativa robusta (ambos en ranx.compare)
+%   - Justificación de la elección: Urbano et al. (2019) — t y permutación mantienen el error tipo I nominal, bootstrap sesgado, Wilcoxon y signo poco fiables; Smucker et al. (2007) como antecedente
+%   - Comparaciones múltiples: Tukey HSD para la comparación cruzada de los seis algoritmos (E2)
 
 \subsection{Experimento 1: fusión vs. modelos individuales}\label{subsec:metodologia-e1}
 % - Cada fusión vs. cada modelo individual
@@ -32,3 +36,4 @@ En este capítulo se describe el marco metodológico de este trabajo de tesis.
 
 \subsection{Experimento 4: modelos abiertos vs. propietarios}\label{subsec:metodologia-e4}
 % - Sistemas de la tesis vs. líneas base propietarias reportadas en MessIRve
+% - Comparación descriptiva con valores reportados (sin prueba de significancia: los sistemas propietarios no publican puntuaciones por consulta)
