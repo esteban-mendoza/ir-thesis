@@ -1,17 +1,83 @@
 \chapter{Estado del arte}\label{cap:edoarte}
 
-\epigraph{``Frase''
-}{\textit{ Autor }}
+En este capítulo se presenta un panorama del estado del arte y el posicionamiento de esta tesis.
 
-En este capítulo se presenta un panorama global del estado del arte en el área de .... 
+\section{Líneas base de recuperación: de BM25 a los modelos neuronales modernos}\label{sec:edoarte-lineas-base}
 
-\section{Sección 1}\label{sec:seccion3.1}
+\subsection{Modelos léxicos: BM25 y variantes modernas}\label{subsec:edoarte-bm25}
+% - Okapi BM25 como línea base omnipresente en benchmarks
+% - Variantes (BM25+, BM25L): qué deficiencia corrige cada una
+% - Infraestructura reproducible: Anserini/Pyserini (mención)
 
-\subsection{Sub-Sección 1}
+\subsection{Codificadores duales multilingües}\label{subsec:edoarte-duales}
+% - Línea evolutiva: mDPR → mContriever → mE5 → mE5-instruct
+% - Generación reciente: Qwen3-Embedding, jina-embeddings-v5
+% - Qué reportan en multilingüe y en español (MIRACL, MTEB)
+% - Cierre: criterio de selección de los modelos de esta tesis
 
+\subsection{Modelos multifuncionales y dispersos aprendidos (BGE-M3, SPLADE)}\label{subsec:edoarte-multifuncionales}
+% - SPLADE: v1 → v3, qué mejora cada versión y resultados reportados
+% - BGE-M3: denso + disperso + multi-vector en un solo modelo
+% - Anticipación de la fusión interna (enlaza con §3.3.3)
 
-%-------------------------------------------------------------------
-\section{Resumen}
-En esta capítulo se resumen las técnicas y métodos que han sido desarrollados hasta el momento para ....
- 
- 
+\subsection{Interacción tardía (de ColBERT a jina-colbert-v2)}\label{subsec:edoarte-tardia}
+% - ColBERT: la propuesta original de interacción tardía
+% - ColBERTv2: compresión y destilación
+% - jina-colbert-v2: variante multilingüe; resultados reportados
+
+\section{Reordenamiento neuronal en la literatura}\label{sec:edoarte-reranking}
+
+\subsection{Cross-encoders (monoBERT, monoT5, bge-reranker-v2-m3)}\label{subsec:edoarte-crossencoders}
+% - monoBERT y monoT5: reranking punto a punto con Transformers
+% - bge-reranker-v2-m3: el cross-encoder multilingüe de esta tesis
+% - Efectividad reportada y costo computacional
+
+\subsection{Rerankers listwise con LLMs (RankGPT, jina-reranker-v3)}\label{subsec:edoarte-listwise}
+% - RankGPT/RankZephyr: reranking como generación de ordenaciones
+% - jina-reranker-v3: el listwise de esta tesis
+% - Cierre de la sección: trade-offs efectividad/eficiencia en la cascada
+
+\section{Fusión de rangos en la literatura}\label{sec:edoarte-fusion}
+
+\subsection{Los métodos clásicos}\label{subsec:edoarte-clasicos}
+% - Fox & Shaw 1994: CombSUM/CombMNZ en TREC
+% - Aslam & Montague 2001: Borda-fuse (y Bayes-fuse)
+% - Montague & Aslam 2002: Condorcet-fuse
+% - Cormack et al. 2009: RRF
+% - Bailey et al. 2017: RBC
+% - Hallazgo transversal: la fusión suele superar a los componentes individuales
+
+\subsection{Fusión léxico-semántica en la era neuronal}\label{subsec:edoarte-era-neuronal}
+% - Karpukhin et al. 2020 (DPR): el denso supera a BM25, pero la combinación ayuda
+% - Luan et al. 2021: combinaciones sparse/dense
+% - Bruch et al. 2023 y Lin et al. 2021: análisis de cuándo aporta la fusión
+% - Síntesis crítica: condiciones bajo las que la fusión léxico-semántica ayuda y cuándo no
+
+\subsection{Fusión interna del modelo vs. fusión externa de listas (BGE-M3)}\label{subsec:edoarte-fusion-interna}
+% - BGE-M3 como caso de estudio de fusión interna
+% - Qué pierde la fusión interna frente a fusionar listas de sistemas especializados
+% - Motivación directa de las preguntas de investigación de la tesis
+
+\section{Benchmarks de IR y el español}\label{sec:edoarte-benchmarks}
+
+\subsection{De TREC a MS MARCO y BEIR}\label{subsec:edoarte-trec-marco-beir}
+% - TREC: pooling y juicios incompletos
+% - MS MARCO: escala web
+% - BEIR: evaluación zero-shot heterogénea
+
+\subsection{Benchmarks multilingües y particularidades del español}\label{subsec:edoarte-espanol}
+% - MIRACL, Mr. TyDi, MTEB Multilingual: cobertura del español
+% - Morfología del español y sus efectos en modelos léxicos y tokenización
+% - Backbones en español (BETO, RoBERTa-bne, MARIA): mención
+% - Translationese: mMARCO-es vs. MIRACL-es vs. datos nativos
+
+\subsection{MessIRve}\label{subsec:edoarte-messirve}
+% - Descripción: origen, tamaño, variedades dialectales del español (incl. rioplatense)
+% - Qué lo distingue: consultas nativas, no traducidas
+% - Resultados previos reportados (incluidas las líneas base propietarias)
+
+\section{Posicionamiento de esta tesis}\label{sec:edoarte-posicionamiento}
+% - Gap 1: la fusión se evalúa sobre todo en inglés; falta evidencia sistemática en español
+% - Gap 2: no hay comparación sistemática de algoritmos de fusión frente a rerankers modernos
+% - Gap 3: abiertos vs. propietarios sin resolver en español
+% - Puente al cap. 4: los cuatro experimentos responden a estos gaps

@@ -1,35 +1,79 @@
-\chapter{Marco Teórico} \label{cap:antecedentes}
+\chapter{Marco teórico}\label{cap:marco}
 
-En este capítulo se describen conceptos y términos que se utilizarán en el desarrollo de esta tesis......
+En este capítulo se describen los conceptos y términos que se utilizarán en el desarrollo de esta tesis.
 
-\section{Fundamentos de recuperación de información}\label{sec:seccion2.1}
-% (definición formal del problema, espacio de documentos, relevancia)
+\section{Fundamentos de recuperación de información}\label{sec:marco-fundamentos}
 
-\section{Modelos léxicos: fundamentos}
-% (TF-IDF, BM25 como caso del Probabilistic Relevance Framework)
+\subsection{El problema de la recuperación de información}\label{subsec:marco-problema}
+% - Definición informal: consulta + corpus → ranking de documentos
+% - Definiciones formales: consulta, documento, corpus, relevancia, ranking como permutación
+% - El sistema de RI como función de puntuación y el orden que induce
+% - Relevancia binaria vs. graduada (anticipo para §2.5)
 
-\section{Representaciones vectoriales del lenguaje}
-\subsection{Hipótesis distribucional y embeddings estáticos}
-\subsection{Arquitectura Transformer y atención}
-\subsection{Embeddings contextuales}
+\subsection{El principio de ordenación por probabilidad (PRP)}\label{subsec:marco-prp}
+% - Enunciado: ordenar por P(relevante | d, q) es óptimo bajo sus supuestos
+% - Consecuencia: los modelos de RI como estimadores (puente hacia el BIM)
 
-\section{Paradigmas de modelos neuronales para IR}
-% (definiciones formales de dual-encoder, sparse-encoder, cross-encoder, late interaction — sin entrar en modelos concretos)
+\section{Modelos de recuperación de primera etapa}\label{sec:marco-primera-etapa}
 
-\section{Aprendizaje de representaciones}
-\subsection{Funciones de pérdida contrastivas}
-\subsection{Fine-tuning y aproximaciones de bajo rango}
-\subsection{Representaciones jerárquicas y truncables}
+\subsection{Modelos léxicos probabilísticos: del BIM a BM25}\label{subsec:marco-bm25}
+% - Bolsa de palabras y TF-IDF como heurística clásica
+% - BIM y peso RSJ: derivación desde el PRP
+% - 2-Poisson: saturación de la frecuencia de término
+% - Normalización por longitud del documento
+% - BM25 canónico: fórmula final, papel de k₁ y b
 
-\section{Fundamentos matemáticos de la fusión de rangos}
-% (definición de lista ordenada, agregación de preferencias,  Condorcet, Borda como objetos formales)
+\subsection{Representaciones dispersas aprendidas (SPLADE)}\label{subsec:marco-splade}
+% - Misma idea que BM25 (vector sobre el vocabulario) con pesos aprendidos
+% - SPLADE: proyección sobre vocabulario vía MLM, expansión aprendida, regularización de dispersión
+% - Lectura conceptual: «BM25 aprendido» → léxico moderno de esta tesis
 
-\section{Evaluación en recuperación de información}
-% (definiciones de nDCG, MAP, MRR, Recall, Precision)
+\subsection{Representaciones densas y codificadores duales}\label{subsec:marco-densos}
+% - Hipótesis distribucional; de embeddings estáticos a contextuales
+% - Tokenización y autoatención: lo mínimo del Transformer (encoder bidireccional)
+% - Codificador dual: definición formal (dos torres + similitud), pooling
+% - Qué captura lo semántico frente a lo léxico (motiva la complementariedad)
+% - Mención breve: variantes guiadas por instrucciones (mE5-instruct) y entrenamiento contrastivo (InfoNCE)
 
+\section{Reordenamiento neuronal}\label{sec:marco-reranking}
 
-%-------------------------------------------------------------------
-\section{Resumen}
+\subsection{La arquitectura en cascada: recuperación y reordenamiento}\label{subsec:marco-cascada}
+% - Por qué en etapas: el costo prohíbe aplicar modelos pesados a todo el corpus
+% - Primera etapa (recall) vs. segunda etapa (precisión); el recall inicial como cota
 
-En este capítulo se expusieron la terminología y conceptos relacionados con ....
- 
+\subsection{Cross-encoders}\label{subsec:marco-crossencoders}
+% - Definición: consulta y documento concatenados, puntuación conjunta
+% - Interacción completa → más precisión; costo por par → no escala
+% - Taxonomía pointwise / pairwise / listwise (listwise enlaza al cap. 3)
+
+\section{Fusión de rangos}\label{sec:marco-fusion}
+
+\subsection{Formalización}\label{subsec:marco-fusion-formal}
+% - Ranking como permutación; notación formal
+% - Equivalencia de rango bajo transformaciones monótonas → justifica la fusión de rangos
+% - Fusión de puntuaciones vs. de rangos: el problema de las escalas incompatibles
+% - Analogía con teoría de elección social (sistemas = votantes, documentos = candidatos)
+
+\subsection{Métodos basados en puntuaciones (CombMNZ)}\label{subsec:marco-combmnz}
+% - Normalización de puntuaciones como prerrequisito
+% - CombSUM y CombMNZ; el factor MNZ que premia la presencia en varias listas
+
+\subsection{Métodos posicionales (BordaFuse, RRF, ISR)}\label{subsec:marco-posicionales}
+% - BordaFuse: puntos por posición, conexión con el conteo de Borda
+% - RRF: 1/(k+r), papel del parámetro k
+% - ISR (Inverse Square Rank): definición (peso 1/r²) y propiedades
+
+\subsection{Comparaciones por pares y modelos de usuario (Condorcet, RBC)}\label{subsec:marco-pares}
+% - Condorcet: mayoría por pares, grafo de preferencias y manejo de ciclos
+% - RBC (Rank-Biased Centroids): modelo de usuario con profundidad de escaneo; fusión como utilidad esperada
+
+\section{Evaluación en recuperación de información}\label{sec:marco-evaluacion}
+
+\subsection{Métricas de evaluación}\label{subsec:marco-metricas}
+% - P@k y Recall@k: precisión y cobertura a profundidad fija
+% - MAP y MRR
+% - nDCG: ganancia graduada con descuento; por qué es la métrica primaria
+
+\subsection{Pruebas de significancia estadística}\label{subsec:marco-significancia}
+% - El problema: promedios de métrica vs. variabilidad por consulta
+% - Permutación / bootstrap / t pareada; corrección por comparaciones múltiples

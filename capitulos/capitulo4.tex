@@ -1,14 +1,34 @@
- \chapter{Metodología propuesta}\label{cap:propuesta}
+\chapter{Metodología}\label{cap:metodologia}
 
-\epigraph{``Frase''
-}{\textit{ Autor }}
+En este capítulo se describe el marco metodológico de este trabajo de tesis.
 
-En este capítulo se describe el marco metodológico de este trabajo de tesis....
+\section{El conjunto de datos MessIRve}\label{sec:metodologia-dataset}
+% - Cifras: consultas, documentos, juicios, variedades dialectales
+% - Distribución de relevantes por consulta (pendiente en notes.md; justifica la batería de métricas)
+% - Partición usada (entrenamiento/prueba por artículo de Wikipedia; restricciones del conjunto de prueba)
 
-\section{Sección 1}\label{sec:seccion4.1}
+\section{Sistema de recuperación}\label{sec:metodologia-sistema}
+% - Arquitectura del pipeline: primera etapa + fusión + reordenamiento (figura)
+% - Configuración de cada modelo base; nota sobre el límite de 0.6B
+% - Rerankers y profundidad de reordenamiento
+% - Implementación y reproducibilidad (ir-spanish, hardware, semillas)
 
-\subsection{Sub-Sección 1}
-%------------------------------------------------------------------
-\section{Resumen}
-En este capítulo se describió la metodología propuesta para ......
- 
+\section{Algoritmos de fusión}\label{sec:metodologia-fusion}
+% - Los seis con sus parámetros: CombMNZ, BordaFuse, Condorcet, RRF, ISR (Inverse Square Rank), RBC (Rank-Biased Centroids)
+% - Qué listas se fusionan y profundidad de corte
+% - Normalización de puntuaciones para CombMNZ
+
+\section{Diseño experimental}\label{sec:metodologia-diseno}
+% - Protocolo común: métricas (nDCG@10 primaria; Recall@100, MRR@10, MAP, P@10/50) y pruebas de significancia
+
+\subsection{Experimento 1: fusión vs. modelos individuales}\label{subsec:metodologia-e1}
+% - Cada fusión vs. cada modelo individual
+
+\subsection{Experimento 2: comparación de algoritmos de fusión}\label{subsec:metodologia-e2}
+% - Comparación cruzada de los seis algoritmos, por métrica y por familia
+
+\subsection{Experimento 3: fusión vs. reordenamiento neuronal}\label{subsec:metodologia-e3}
+% - Mejor fusión vs. ambos rerankers, con análisis de eficiencia
+
+\subsection{Experimento 4: modelos abiertos vs. propietarios}\label{subsec:metodologia-e4}
+% - Sistemas de la tesis vs. líneas base propietarias reportadas en MessIRve

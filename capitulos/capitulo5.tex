@@ -1,16 +1,28 @@
 \chapter{Resultados experimentales}\label{cap:resultados}
 
-\epigraph{``Frase''
-}{\textit{ Autor }}
+En este capítulo se presentan y discuten los resultados experimentales obtenidos.
 
-En este capítulo se mostrarán y discutirán los resultados obtenidos en .....
+\section{Experimento 1: fusión vs. modelos individuales}\label{sec:resultados-e1}
+% - Tabla principal de modelos base y fusiones
+% - Qué fusiones superan a qué modelos, con significancia
+% - Lectura por familia (léxico vs. semántico)
 
-\section{Sección 1}
+\section{Experimento 2: comparación de algoritmos de fusión}\label{sec:resultados-e2}
+% - Tabla comparativa de los seis algoritmos
+% - Ranking de algoritmos y diferencias significativas
+% - Sensibilidad a parámetros (k de RRF) si aplica
 
+\section{Experimento 3: fusión vs. reordenamiento neuronal}\label{sec:resultados-e3}
+% - Tabla: mejor fusión vs. rerankers
+% - Costo/beneficio: relevancia ganada vs. costo
+% - Significancia
 
-\subsection{Sub-Sección 1}
+\section{Experimento 4: modelos abiertos vs. propietarios}\label{sec:resultados-e4}
+% - Tabla vs. líneas base propietarias
+% - Posición relativa alcanzada
 
-
-%-------------------------------------------------------------------
-\section{Resumen}
-A partir de los resultados presentados en éste capítulo podemos resumir que nuestra metodología .....
+\section{Análisis de complementariedad léxico-semántica}\label{sec:resultados-complementariedad}
+% - Medida de complementariedad: RBO (Rank-Biased Overlap; Webber, Moffat y Zobel, 2010) — misma familia de pesos que RBC
+% - Por qué no Kendall τ: exige listas conjuntas y no pondera por profundidad; RBO admite listas no conjuntas (lo habitual entre familias) y pondera el tope
+% - Consultas donde gana cada familia, con ejemplos
+% - Relación entre complementariedad y ganancia de fusión (responde al objetivo específico 6)
