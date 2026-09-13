@@ -50,7 +50,9 @@
 %--------------------------------------------------------------
 \usepackage{fancyhdr}                                                    % Encabezados/pies
 \usepackage[left=3.4cm, top=2.5cm, right=2.6cm, bottom=2.5cm]{geometry}  % Márgenes
-\usepackage[sort&compress]{natbib}                                       % Citas
+\usepackage[backend=biber,style=apa]{biblatex}                           % Citas (APA 7, backend biber)
+\addbibresource{biblio.bib}                                              % Base de datos bibliográfica
+\usepackage{csquotes}                                                    % Comillas tipográficas (requerido por biblatex-apa)
 \usepackage{tocbibind}            % Incluye TOC, LoF, LoT y bibliografía en el índice
 
 %--------------------------------------------------------------
@@ -210,8 +212,7 @@ pdfauthor={Jorge Esteban Mendoza Ortiz}
 	\fancyhead[RO]{\leftmark}
 	\fancyhead[EL]{}
 	
-	\bibliography{biblio}
-	\bibliographystyle{abbrv}    % Alternativas: alpha, apalike, plainnat, ...
+	\printbibliography[heading=bibintoc]
 	
 	\printindex
 	
