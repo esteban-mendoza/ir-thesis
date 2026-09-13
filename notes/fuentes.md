@@ -20,7 +20,7 @@ apoyo o antecedentes.
 
 - **Wang, L., Yang, N., Huang, X., Yang, L., Majumder, R., & Wei, F. (2024). Multilingual E5 Text Embeddings: A Technical Report. arXiv:2402.05672.** — `intfloat/multilingual-e5-large-instruct`
   → `recursos/mE5-WangEtAl2024.pdf`
-- **Chen, J., Xiao, S., Zhang, P., Luo, K., Lian, D., & Wang, J. (2024). BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation. arXiv:2402.03216.** — `BAAI/bge-m3`
+- **Chen, J., Xiao, S., Zhang, P., Luo, K., Lian, D., & Liu, Z. (2024). BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation. arXiv:2402.03216.** — `BAAI/bge-m3`
   → `recursos/bgeM3-ChenEtAl2024.pdf`
 - **Zhang, Y., et al. (2025). Qwen3 Embedding: Advancing Text Embedding and Reranking Through Foundation Models. arXiv:2506.05176.** — `Qwen/Qwen3-Embedding-0.6B`
   → `recursos/qwen3Embedding-ZhangEtAl2025.pdf`
@@ -29,7 +29,7 @@ apoyo o antecedentes.
 
 ### Dispersos (learned sparse)
 
-- **Formal, T., Lassance, C., Piwowarski, B., & Clinchant, S. (2021). SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking. SIGIR '21.**
+- **Formal, T., Piwowarski, B., & Clinchant, S. (2021). SPLADE: Sparse Lexical and Expansion Model for First Stage Ranking. SIGIR '21.**
   → `recursos/splade-FormalEtAl2021.pdf`
 - **Lassance, C., Déjean, H., Formal, T., & Clinchant, S. (2024). SPLADE-v3: New baselines for SPLADE. arXiv:2403.06789.** — `naver/splade-v3`
   → `recursos/spladeV3-LassanceEtAl2024.pdf`
@@ -45,7 +45,7 @@ apoyo o antecedentes.
 
 - **Wang, F., Li, Y., & Xiao, H. (2025). jina-reranker-v3: Last but Not Late Interaction for Listwise Document Reranking. arXiv:2509.25085.** — `jinaai/jina-reranker-v3`
   → `recursos/jinaRerankerV3-WangEtAl2025.pdf`
-- Chen, J., Xiao, S., Zhang, P., Luo, K., Lian, D., & Wang, J. (2024). BGE M3-Embedding... arXiv:2402.03216. — `BAAI/bge-reranker-v2-m3` (arquitectura del ecosistema BGE M3 / Reranker-v2).
+- Chen, J., Xiao, S., Zhang, P., Luo, K., Lian, D., & Liu, Z. (2024). BGE M3-Embedding... arXiv:2402.03216. — `BAAI/bge-reranker-v2-m3` (arquitectura del ecosistema BGE M3 / Reranker-v2).
   → `recursos/bgeM3-ChenEtAl2024.pdf` (mismo PDF que BGE-M3)
 - Li, C., Liu, Z., Xiao, S., & Shao, Y. (2023). Making Large Language Models A Better Foundation For Dense Retrieval. arXiv:2312.15503. — proceso LLaRA del ecosistema BGE.
   → `recursos/llara-LiEtAl2023.pdf`

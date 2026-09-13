@@ -8,7 +8,9 @@ Protocolo obligatorio para todo agente:
 
 1. Leer este archivo (y `AGENTS.md`) al **inicio** de cada sesión.
 2. Contrastar tu contexto con el changelog y los archivos del repositorio antes de actuar.
-3. Al terminar cualquier cambio significativo, **añadir una entrada al inicio** (orden cronológico inverso) con: archivos tocados, decisiones tomadas y estado/pendientes.
+3. Al terminar un cambio **importante**, **añadir una entrada al inicio** (orden cronológico inverso) con: archivos tocados, decisiones tomadas y estado/pendientes.
+
+**Qué es «importante».** Una entrada se justifica cuando una sesión futura necesitaría leerla para no repetir trabajo, no deshacer una decisión o no malinterpretar el estado del proyecto: decisiones de contenido o de método, cambios de estructura, archivos nuevos o reescritos, y correcciones que alteran lo que dice la tesis. **No** hace falta anotar erratas, typos, reformateos, renombrados internos sin consecuencias ni el detalle de las verificaciones: el historial de git ya los guarda y el changelog debe seguir siendo corto para poder leerse entero.
 
 ## Plantilla de entrada
 
@@ -18,6 +20,11 @@ Protocolo obligatorio para todo agente:
 - **Estado / pendientes:** qué quedó por hacer.
 
 ---
+
+## 2026-09-13 — Claves de cita normalizadas en `biblio.bib`
+- **Cambios:** `tesis/biblio.bib` — las 18 claves renombradas a la convención `<modelo-o-tema>-<AutoresEnPascalCase><Año>`, idéntica al nombre base del PDF en `recursos/`. Solo cambiaron las líneas de apertura `@tipo{clave,`; ningún campo se tocó. Verificado con bibtex (18 entradas, 0 errores) y `latexmk -g -pdf` (exit 0). `AGENTS.md` — punto 3 del protocolo alineado con el criterio nuevo, añadido el punto 4 (una decisión que contradiga el archivo obliga a actualizarlo en la misma sesión, verificando antes cuál de los dos tiene razón), y «Advertencias conocidas» reescritas: las dos que avisaban de entradas heredadas de PLN y de claves inconsistentes quedaron falsas al vaciar el archivo. `tesis/notes/changelog.md` — añadido el criterio de qué merece entrada.
+- **Decisiones:** 2 autores → ambos apellidos (`KhattabZaharia`, `FoxShaw`); 3 o más → primer apellido + `EtAl`. El prefijo de tema conserva la capitalización del PDF (`bm25-` en minúsculas; `mE5-`, `spladeV3-` tal cual) y va sin tildes (`isr-MouraoEtAl2014`). La clave es el nombre del PDF: clave ↔ archivo ↔ fuente son el mismo identificador. **La sección «Compilación» de `AGENTS.md` no se tocó:** se pidió cambiarla a biber, pero `tesis/` usa natbib + BibTeX (`tesis.tex:53` y `:213-214`; `tesis.blg` = «This is BibTeX»; sin `.bcf`); el subproyecto con biblatex + biber es `protocolo/`.
+- **Estado / pendientes:** `biblio.bib` ya tiene las fuentes principales de `fuentes.md`. Las secundarias se agregarán solo si hacen falta. El cuerpo aún no tiene ningún `\cite`, así que la bibliografía se imprime vacía: es esperado.
 
 ## 2026-09-12 — Cap. 4: plan de párrafos (nivel 4) en capitulo4.tex
 - **Cambios:** `tesis/capitulos/capitulo4.tex` — añadido el nivel 4 (plan párrafo-por-párrafo) como comentarios `% P<n>:` bajo cada (sub)sección, conservando las viñetas de nivel 3 espejo del índice. `AGENTS.md` — documentada la convención en «Dónde vive el plan». Esta entrada en el changelog.
