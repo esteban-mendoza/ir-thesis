@@ -1,6 +1,8 @@
 # Changelog
 
-Registro cronológico **autoritativo** de cambios y decisiones del proyecto de tesis.
+Registro cronológico **autoritativo** de cambios y decisiones de `tesis/` (el documento de la tesis).
+
+**Alcance.** Este changelog registra **solo** cambios de `tesis/`. Los cambios de `ir-spanish/` van en `ir-spanish/notes/changelog.md`. Si un cambio toca los dos repositorios, se anota en ambos.
 
 El trabajo se realiza con varios agentes que se alternan: **asume que tu contexto de conversación puede estar descontinuado**. Ante cualquier duda entre tu memoria y este archivo (o el contenido real del repositorio), este archivo y el repositorio mandan.
 
