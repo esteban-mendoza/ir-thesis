@@ -4,12 +4,45 @@ En este capítulo se describe el marco metodológico de este trabajo de tesis.
 
 \section{El conjunto de datos MessIRve}\label{sec:metodologia-dataset}
 % - Cifras: consultas, documentos, juicios, variedades dialectales
-% - Distribución de relevantes por consulta (pendiente en notes.md; justifica la batería de métricas)
+% - Distribución de relevantes por consulta (calculada en el análisis de distribuciones; justifica la batería de métricas)
 % - Partición usada (entrenamiento/prueba por artículo de Wikipedia; restricciones del conjunto de prueba)
 % P1: Qué es MessIRve y de dónde sale: consultas reales de usuarios (obtenidas con la API de autocompletado de Google) emparejadas con pasajes de la Wikipedia en español; quién lo publicó, con cita al artículo del dataset (ver notes/fuentes.md). Cerrar con por qué es el conjunto adecuado para esta tesis: español nativo, no traducido (contraste con el «translationese» de mMARCO-es; remite a §3.4).
+%   - Qué es: conjunto de RI en español a gran escala; cada instancia es un par (consulta real de usuario, párrafo relevante de la Wikipedia en español).
+%   - Origen de las consultas: API de autocompletado de Google (www.google.com/complete/search), a partir de 120 prefijos semilla («qué», «cómo», «dónde», «quién», …) expandidos iterativamente; extracción entre marzo y abril de 2024 (las consultas reflejan intereses populares de ese periodo).
+%   - Origen de los documentos relevantes: respuestas de los «featured snippets» de Google Search que enlazan a la Wikipedia en español. Estrategia de recolección inspirada en GooAQ (mención sin cita: no entra en la bibliografía).
+%   - Autores y publicación: Valentini, Cotik, Furman, Bercovich, Altszyler y Pérez, EMNLP 2025 → \parencite{messirve-ValentiniEtAl2025} (la clave ya existe en biblio.bib).
+%   - Cobertura dialectal: 20 países con español como lengua oficial más Estados Unidos; Guinea Ecuatorial quedó fuera por no tener dominio de Google. El subconjunto «full» combina las consultas no específicas de país (etiqueta «none») con la unión de las consultas de todos los países.
+%   - Versión utilizada: 1.2. La actualización de julio de 2025 publicó a la vez la v1.1 (~200 000 consultas nuevas respecto de la v1.0) y la v1.2 (que añade los títulos de artículo como columnas); nosotros trabajamos con la v1.2.
+%   - Cierre: por qué es adecuado para esta tesis — español nativo, no traducido (contraste con el «translationese» de mMARCO-es; remite a §3.4); consultas reales de usuarios; diversidad dialectal documentada (ejemplos del artículo: «green» por la Green Card en EE. UU., «checar» en México).
+%   - Opcional: licencia CC BY-NC 4.0 (una línea si se considera pertinente).
 % P2: Cifras del conjunto: ~700 000 consultas; tamaño del corpus eswiki_20240401 (párrafos de la Wikipedia en español, volcado de abril de 2024); número de juicios de relevancia y su escala [verificar en el artículo si son binarios o graduados]; variedades dialectales cubiertas. [Considerar una tabla resumen del conjunto de datos.]
-% P3: Distribución del número de documentos relevantes por consulta: media, mediana y percentiles [PENDIENTE: calcular, cf. ir-spanish/analysis/]. Explicar cómo esta distribución justifica la batería de métricas adoptada en §4.4 (en particular Recall@100 y P@50).
+%   - Cifras del split de prueba, subconjunto «full», v1.2 (fuente: ir-spanish/analysis/distributions.ipynb):
+%       • 174 078 filas = pares (consulta, documento relevante), i.e. juicios de relevancia;
+%       • 170 055 consultas únicas;
+%       • 69 001 documentos relevantes únicos (un documento = un párrafo; docid de la forma «artículo#párrafo», p. ej. «129493#38»);
+%       • 51 190 artículos de Wikipedia que aportan esos párrafos.
+%   - Corpus: eswiki_20240401, volcado de la Wikipedia en español de abril de 2024: 14 047 759 párrafos de 1 946 205 artículos (dataset aparte: spanish-ir/eswiki_20240401_corpus).
+%   - Escala de los juicios [resuelto]: match_score es continuo en [0.5, 1] (proporción de la respuesta del SERP contenida como subcadena en el texto del documento), PERO en el split de prueba match_score = 1 siempre (y expanded_search = False), así que los juicios de prueba son en la práctica binarios (relevante / no relevante).
+%   - Longitudes en palabras (notebook): consultas — mín 3, máx 22, media 5.70, mediana 5, P99 = 12; documentos relevantes (título + texto) — mín 5, máx 2 226, media 79.35, mediana 68; corpus completo — media 59.41, mediana 47.
+%   - Ejemplo concreto para ilustrar el formato (del notebook): consulta «a cual movimiento literario pertenece fabio fiallo» → párrafo «129493#38» del artículo «Literatura de la República Dominicana», answer_type = feat_snip.
+%   - Cifra global del artículo (v1.0): el resumen reporta «casi 700 000 consultas» (train + test); la v1.1 añadió ~200 000. [VERIFICAR: si se quiere citar el total actual de la v1.2 hay que calcularlo (train + test); el notebook solo cubre el split de prueba.]
+%   - [Sugerencia: tabla resumen del conjunto — consultas únicas, juicios, documentos relevantes, artículos y longitudes medias del split de prueba; opcionalmente una fila para el corpus.]
+% P3: Distribución del número de documentos relevantes por consulta: media, mediana, desviación estándar y frecuencias (calculadas en ir-spanish/analysis/distributions.ipynb, §4). Explicar cómo esta distribución justifica la batería de métricas adoptada en §4.4 (en particular Recall@100 y P@50).
+%   - Distribución de documentos relevantes por consulta (test, v1.2; notebook §4): mín 1, máx 4, media 1.02, mediana 1, desviación estándar 0.16.
+%   - Frecuencias: 1 relevante → 166 201 consultas (97.73 %); 2 → 3 698 (2.17 %); 3 → 143 (0.084 %); 4 → 13 (0.0076 %).
+%   - Por qué hay consultas con más de un relevante: en el subconjunto «full» la misma consulta puede devolver featured snippets distintos en distintos dominios de país \parencite{messirve-ValentiniEtAl2025}. (Este cálculo resuelve el cabo suelto anotado en el changelog del 2026-09-13.)
+%   - Consecuencias para la batería de métricas de §4.4:
+%       • Recall@100 toma valores en {0, 1} por consulta → se interpreta como la proporción de consultas cuyo documento relevante aparece en el top-100: adecuado para evaluar la cobertura de la primera etapa.
+%       • P@50 queda acotada por 1/50 = 0.02 en el 97.7 % de las consultas → rango muy comprimido; se reporta pero no es discriminativa.
+%       • MAP adopta un comportamiento similar al de MRR (con un único relevante, AP = 1/rango del relevante).
+%       • nDCG@10 sigue siendo informativa por su sensibilidad a la posición → de ahí su papel como métrica primaria.
+%   - [Figuras ya generadas por el cuaderno y copiadas a tesis/figuras/ (7 PDF: distribución de relevantes por consulta y longitudes de consultas, de documentos relevantes y del corpus, en train y test); queda pendiente decidir si se incluye alguna en el capítulo. El cuaderno las regenera en ir-spanish/analysis/figures/.]
 % P4: Partición utilizada: 80 % entrenamiento / 20 % prueba, dividida por artículo de Wikipedia; restricciones del conjunto de prueba (match_score = 1, expanded_search = False). Declarar que todos los experimentos del cap. 5 se evalúan exclusivamente sobre esta partición de prueba.
+%   - Partición: entrenamiento / prueba dividida por artículo de Wikipedia — todos los párrafos de un artículo quedan en un solo split; la partición se hizo por país, con ~20 % de los artículos asignados a prueba; objetivo: reducir el traslape temático entre entrenamiento y prueba \parencite{messirve-ValentiniEtAl2025}.
+%   - No existe split de validación: los autores dejan libertad de estrategia (p. ej. validación cruzada) \parencite{messirve-ValentiniEtAl2025}.
+%   - Restricciones del split de prueba: match_score = 1 (emparejamiento exacto del snippet con el documento) y expanded_search = False (sin resultados de «búsqueda expandida» del SERP).
+%   - Declaración: todos los experimentos del cap. 5 se evalúan exclusivamente sobre el split de prueba del subconjunto «full» (v1.2), es decir, 170 055 consultas; el split de entrenamiento no se usó para nada (ni análisis ni ajuste de modelos).
+%   - Reproducibilidad de la carga: datasets.load_dataset("spanish-ir/messirve", "full", revision="1.2")["test"] y spanish-ir/eswiki_20240401_corpus para el corpus.
 
 \section{Sistema de recuperación}\label{sec:metodologia-sistema}
 % - Arquitectura del pipeline: primera etapa + fusión + reordenamiento (figura)

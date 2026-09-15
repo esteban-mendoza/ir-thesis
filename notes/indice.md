@@ -196,7 +196,7 @@ opcional (§3.5).
 
 1. El conjunto de datos MessIRve
    - Cifras: consultas, documentos, juicios, variedades dialectales
-   - Distribución de relevantes por consulta (pendiente en notes.md; justifica la batería de métricas)
+   - Distribución de relevantes por consulta (calculada en el análisis de distribuciones; justifica la batería de métricas)
    - Partición usada (entrenamiento/prueba por artículo de Wikipedia; restricciones del conjunto de prueba)
 2. Sistema de recuperación
    - Arquitectura del pipeline: primera etapa + fusión + reordenamiento (figura)
