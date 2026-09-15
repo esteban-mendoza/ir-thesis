@@ -1,0 +1,109 @@
+%==============================================================
+%  notes/codigo-ejemplos.tex
+%  Catálogo visual de las utilidades de estilos/codigo.tex.
+%
+%  Es un documento INDEPENDIENTE y no forma parte de la tesis: sirve para
+%  ver de un golpe todos los estilos disponibles. Compílalo con
+%
+%      latexmk -pdf codigo-ejemplos.tex
+%
+%  desde tesis/ o desde tesis/notes/ (ambos funcionan). La referencia
+%  escrita está en notes/codigo.md.
+%==============================================================
+\documentclass[11pt,letterpaper]{book}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{color}
+\usepackage{hyperref}
+
+% La ruta del estilo cambia según desde dónde se compile.
+\IfFileExists{estilos/codigo.tex}
+  {\newcommand{\rutacodigo}{estilos/codigo.tex}}
+  {\newcommand{\rutacodigo}{../estilos/codigo.tex}}
+\input{\rutacodigo}
+
+\begin{document}
+
+\chapter{Catálogo de listados de código}
+
+Cada sección muestra el resultado de una utilidad. El código fuente exacto
+de cada ejemplo está en \texttt{notes/codigo.md}.
+
+\section{Python --- \texttt{codigo}, alias \texttt{py}}
+
+\begin{codigo}[py]{Carga del split de prueba de MessIRve}
+consulta = "a cuál movimiento literario pertenece fabio fiallo"  # consulta real
+datos = load_dataset("spanish-ir/messirve", "full", revision="1.2")["test"]
+print(f"{len(datos):,} juicios de relevancia")  # 174,078
+\end{codigo}
+
+\section{Shell --- alias \texttt{sh}, y flotante con \texttt{codigoflotante}}
+
+Un listado flotante se etiqueta con la clave \texttt{label} y se referencia como
+cualquier figura: el listado~\ref{lst:indexacion}, o con hyperref
+\verb|\autoref|: \autoref{lst:indexacion}. (Con cleveref cargado sería
+\verb|\cref{lst:indexacion}|.)
+
+\begin{codigoflotante}[sh, label={lst:indexacion}]{Indexación de un modelo base}
+python -m ir_spanish.index --modelo bge-m3 --corpus eswiki_20240401_corpus
+\end{codigoflotante}
+
+\section{JSON --- alias \texttt{js}}
+
+\begin{codigo}[js]{Configuración del reranker}
+{"modelo": "jinaai/jina-reranker-v3", "profundidad": 100, "semilla": 42}
+\end{codigo}
+
+\section{Pseudocódigo en español --- alias \texttt{seudo}}
+
+\begin{codigo}[seudo]{Fusión RRF}
+algoritmo RRF(listas, k = 60):
+    para cada documento d en la unión de las listas:
+        puntuacion(d) = suma sobre cada lista L de 1 / (k + rango_L(d))
+    devolver los documentos ordenados por puntuacion descendente
+\end{codigo}
+
+\section{Salida de consola --- alias \texttt{sal}}
+
+\begin{codigo}[sal]{Evaluación}
+$ python -m ir_spanish.evaluate --metrica ndcg@10
+nDCG@10 = 0.4123   Recall@100 = 0.8910   MRR@10 = 0.3802
+\end{codigo}
+
+\section{Opciones de \texttt{listings} y líneas largas}
+
+Con \texttt{listing options=\{\ldots\}} se pasa cualquier opción de
+\texttt{listings}; aquí \texttt{firstnumber=7} y una línea que se parte:
+
+\begin{codigo}[listing options={style=python, firstnumber=7}]{Línea larga}
+resultados = evaluar(modelo="multilingual-e5-large-instruct", metrica="ndcg@10", profundidad=100, semilla=42, consulta="ñandú")
+\end{codigo}
+
+\section{Inclusión de un archivo real --- \texttt{\textbackslash archivocodigo}}
+
+\begin{verbatim}
+\archivocodigo[py, lineas={1}{6}]{../ir-spanish/ruta/al/script.py}{Título}
+\end{verbatim}
+
+Aquí se incluyen, como muestra, las primeras líneas de este mismo estilo:
+
+\archivocodigo[lineas={1}{6}]{\rutacodigo}{Encabezado de \texttt{estilos/codigo.tex}}
+
+\section{Código en línea --- \texttt{\textbackslash py}, \texttt{\textbackslash sh}, \texttt{\textbackslash cod}}
+
+Se cargó con \py{revision="1.2"} sobre \sh{ssh iimas} y se evaluó el \cod{top-100}.
+La consulta \py{consulta_única} y el término \py{ñandú} conservan sus acentos, igual
+que \cod{P@50} y \sh{python -m ir_spanish.evaluate}.
+
+\section{Índice de listados}
+
+Si quieres un «Índice de listados», añade \verb|\lstlistoflistings| en el
+material preliminar de \texttt{tesis.tex} (junto a \verb|\listoffigures| y
+\verb|\listoftables|); las entradas se registran solas.
+
+\lstlistoflistings
+
+\end{document}

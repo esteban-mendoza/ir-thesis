@@ -14,6 +14,9 @@
 *.cb2
 .*.lb
 
+## Listados de código (estilos/codigo.tex)
+*.listing
+
 ## Bibliography
 *.bbl
 *.bcf

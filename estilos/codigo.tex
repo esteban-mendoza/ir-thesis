@@ -1,0 +1,238 @@
+%==============================================================
+%  estilos/codigo.tex
+%  Utilidades para mostrar código y pseudocódigo en la tesis.
+%
+%  Motor: listings (resaltado de sintaxis) + tcolorbox (marco y título).
+%  No requiere instalar nada ni compilar con --shell-escape: funciona con
+%  pdflatex/latexmk tal como está configurada la tesis.
+%
+%  Se carga desde el preámbulo de tesis.tex con  \input{estilos/codigo}
+%  Documentación y ejemplos: notes/codigo.md  y  notes/codigo-ejemplos.tex
+%
+%  Resumen de la interfaz:
+%    \begin{codigo}[style=python]{Título}   ... \end{codigo}          (se parte entre páginas)
+%    \begin{codigoflotante}[style=python]{Título} ... \end{codigoflotante}  (flotante)
+%    \archivocodigo[firstline=1,lastline=20]{ruta.py}{Título}         (desde archivo)
+%    \py{código}   \sh{comando}   \cod{texto}                         (en línea)
+%==============================================================
+
+\usepackage{xcolor}          % Modelos de color RGB (ya lo carga tcolorbox, aquí para dejarlo explícito)
+\usepackage{listings}        % Resaltado de sintaxis
+\usepackage{upquote}         % Comillas rectas ' en el código (no tipográficas)
+\usepackage{listingsutf8}    % Archivos completos en UTF-8 con \lstinputlisting
+\usepackage[listings,breakable,skins,hooks]{tcolorbox}   % Marco, título, partido entre páginas
+
+%--------------------------------------------------------------
+%  PALETA
+%  Sobria a propósito: la tesis se imprime en blanco y negro, así que
+%  todo debe seguir siendo distinguible por contraste y por estilo.
+%--------------------------------------------------------------
+\definecolor{codigoFondo}{RGB}{252,252,250}      % fondo del listado
+\definecolor{codigoTitulo}{RGB}{238,238,232}     % barra del título
+\definecolor{codigoLinea}{RGB}{130,130,130}      % marco
+\definecolor{codigoGris}{RGB}{95,95,95}          % números de línea y flecha de continuación
+\definecolor{codigoClave}{RGB}{0,55,125}         % palabras clave
+\definecolor{codigoCadena}{RGB}{140,35,35}       % cadenas
+\definecolor{codigoComentario}{RGB}{85,105,85}   % comentarios
+\definecolor{codigoTipo}{RGB}{20,85,105}         % tipos y clases
+
+%--------------------------------------------------------------
+%  CONFIGURACIÓN COMÚN
+%  El mapa «literate» es lo que permite escribir acentos, eñes y
+%  comillas latinas DENTRO de un listado con pdflatex: listings no
+%  entiende UTF-8 multibyte por sí solo.
+%--------------------------------------------------------------
+\lstset{
+  basicstyle=\ttfamily\small,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false,
+  tabsize=4,
+  upquote=true,
+  breaklines=true,                              % parte las líneas largas
+  breakatwhitespace=false,
+  postbreak=\mbox{\textcolor{codigoGris}{$\hookrightarrow$}\space},
+  numbers=left,
+  numberstyle=\tiny\color{codigoGris},
+  numbersep=8pt,
+  xleftmargin=17pt,
+  keywordstyle=\color{codigoClave}\bfseries,
+  stringstyle=\color{codigoCadena},
+  commentstyle=\color{codigoComentario}\itshape,
+  emphstyle=\color{codigoTipo},
+  captionpos=b,
+  literate=%
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {ü}{{\"u}}1 {Ü}{{\"U}}1 {ñ}{{\~n}}1 {Ñ}{{\~N}}1
+    {¿}{{?`}}1 {¡}{{!`}}1
+    {«}{{\guillemotleft}}1 {»}{{\guillemotright}}1
+    {—}{{---}}1 {–}{{--}}1 {…}{{\ldots}}1
+    {º}{{\textordmasculine}}1 {ª}{{\textordfeminine}}1 {°}{{\textdegree}}1
+    {→}{{$\rightarrow$}}1 {≈}{{$\approx$}}1 {∈}{{$\in$}}1
+}
+
+%--------------------------------------------------------------
+%  LENGUAJES
+%  Python, bash y SQL vienen con listings; JSON y el pseudocódigo
+%  en español se definen aquí porque listings no los trae.
+%--------------------------------------------------------------
+\lstdefinestyle{python}{language=Python}
+
+\lstdefinestyle{bash}{language=bash}
+
+\lstdefinestyle{sql}{language=SQL}
+
+\lstdefinelanguage{json}{
+  alsoletter={-},
+  morestring=[b]",
+  morekeywords={true,false,null},
+  sensitive=true,
+  morecomment=[l]{//},
+}
+
+\lstdefinestyle{json}{language=json}
+
+\lstdefinelanguage{seudo}{
+  sensitive=false,
+  morekeywords={algoritmo,entrada,salida,para,cada,hacer,fin,mientras,si,entonces,
+    sino,devolver,retornar,repetir,hasta,funcion,procedimiento,inicio,
+    verdadero,falso,no,y,o,listas,consulta,consulta,documento,documentos,
+    ordenar,mezclar,fusionar,rango,puntuacion,puntuaciones},
+  morecomment=[l]{\#},
+}
+
+\lstdefinestyle{seudocodigo}{language=seudo}
+
+% Salida de consola: sin números de línea ni resaltado, para pegarla tal cual.
+\lstdefinestyle{salida}{
+  numbers=none,
+  xleftmargin=4pt,
+  keywordstyle={},
+  stringstyle={},
+  commentstyle=\color{codigoGris},
+}
+
+%--------------------------------------------------------------
+%  CAJAS (tcolorbox)
+%--------------------------------------------------------------
+\tcbset{
+  codigoCaja/.style={
+    listing engine=listings,
+    listing only,
+    colback=codigoFondo,
+    colframe=codigoLinea,
+    coltitle=black,
+    colbacktitle=codigoTitulo,
+    fonttitle=\bfseries\small,
+    boxrule=0.4pt,
+    arc=1.5pt,
+    outer arc=1.5pt,
+    left=4pt, right=4pt, top=4pt, bottom=4pt,
+    before skip=8pt, after skip=8pt,
+  },
+  % Alias cortos: \begin{codigo}[py]{…} equivale a [listing style=python].
+  % La forma canónica de tcolorbox, [listing style=python] o
+  % [listing options={…}], también funciona y sirve para cualquier opción
+  % de listings (numbers=none, firstnumber=5, …).
+  py/.style={listing style=python},
+  sh/.style={listing style=bash},
+  sql/.style={listing style=sql},
+  js/.style={listing style=json},
+  seudo/.style={listing style=seudocodigo},
+  sal/.style={listing style=salida},
+  % Rango de líneas de un archivo: \archivocodigo[lineas={10}{25}]{ruta}{Título}
+  lineas/.style 2 args={listing options app={firstline=#1, lastline=#2}},
+}
+
+%--------------------------------------------------------------
+%  ENTORNOS NUMERADOS
+%  Los tres comparten el contador «listadocodigo», que se reinicia en
+%  cada capítulo: el título sale como «Listado 4.1 · …».
+%--------------------------------------------------------------
+\newtcblisting[auto counter, number within=chapter, list inside=lol, list type=lstlisting]%
+  {codigo}[2][]{%
+  codigoCaja,
+  breakable,                                   % se puede partir entre páginas
+  list text={#2},                              % el «Índice de listados» muestra número y título
+  title={Listado~\thetcbcounter\ \textperiodcentered\ #2},
+  #1
+}
+
+\newtcblisting[use counter from=codigo, list inside=lol, list type=lstlisting]%
+  {codigoflotante}[2][]{%
+  codigoCaja,
+  float, floatplacement=tbp,
+  list text={#2},
+  title={Listado~\thetcbcounter\ \textperiodcentered\ #2},
+  #1
+}
+
+\newtcbinputlisting[use counter from=codigo, list inside=lol, list type=lstlisting]%
+  {\archivocodigo}[3][]{%
+  codigoCaja,
+  breakable,
+  list text={#3},
+  title={Listado~\thetcbcounter\ \textperiodcentered\ #3},
+  listing file={#2},
+  #1
+}
+
+%--------------------------------------------------------------
+%  CÓDIGO EN LÍNEA
+%  Se definen SIN argumento a propósito: \lstinline lee el texto en modo
+%  verbatim del flujo de entrada, y con el código como argumento de macro
+%  falla («lstinline ended by EOL»). El delimitador es el carácter que
+%  sigue a la llamada:
+%      \py{revision="1.2"}     \sh|ssh iimas|     \cod{top-100}
+%  Ojo: el contenido no puede llevar el carácter delimitador; para casos
+%  raros, usa \verb|...| .
+%--------------------------------------------------------------
+\newcommand{\py}{\lstinline[style=python]}
+\newcommand{\sh}{\lstinline[style=bash]}
+\newcommand{\cod}{\lstinline}
+
+%--------------------------------------------------------------
+%  NOMBRES EN ESPAÑOL
+%  Se fijan en \AtBeginDocument para que manden sobre los de babel.
+%--------------------------------------------------------------
+\AtBeginDocument{%
+  \renewcommand{\lstlistingname}{Listado}%
+  \renewcommand{\lstlistlistingname}{Índice de listados}%
+}
+
+%--------------------------------------------------------------
+%  REFERENCIAS
+%  Cualquiera de los tres entornos acepta la clave «label»:
+%      \begin{codigoflotante}[py, label={lst:carga}]{Carga del split}
+%  Así, \ref{lst:carga} imprime «5.1»; \autoref{lst:carga} (hyperref)
+%  imprime «Listado 5.1»; y \cref{lst:carga} (cleveref) «listado 5.1».
+%  cleveref es opcional: si no se carga, nada de esto estorba.
+%  Dos cosas que costaron encontrar y conviene no volver a romper:
+%   - El contador que crea tcolorbox se llama tcb@cnt@codigo. Es el nombre
+%     con el que hay que registrar los nombres en español.
+%   - Hay que registrarlos AL CARGAR cleveref, no en \AtBeginDocument:
+%     cleveref construye los formatos de referencia al terminar de cargarse,
+%     de modo que una definición posterior llega tarde y \cref imprime «??»
+%     (aviso «reference format for label type … undefined»). Para eso está
+%     el gancho \AddToHook{package/cleveref/after} de abajo.
+%--------------------------------------------------------------
+\AddToHook{package/cleveref/after}{%
+  \Crefname{tcb@cnt@codigo}{Listado}{Listados}%
+  \crefname{tcb@cnt@codigo}{listado}{listados}%
+}
+
+\makeatletter
+\AtBeginDocument{%
+  \expandafter\newcommand\csname tcb@cnt@codigoautorefname\endcsname{Listado}%
+  %--- ÍNDICE DE LISTADOS EN EL ÍNDICE GENERAL
+  % tocbibind solo conoce las listas de figuras y de tablas, así que el
+  % «Índice de listados» no aparecía en el índice general. Se reusa su
+  % propio mecanismo (\tocfile), que pone el encabezado y DESPUÉS el
+  % \addcontentsline: así la entrada apunta a la página del encabezado
+  % aunque la lista ocupe varias páginas.
+  \@ifpackageloaded{tocbibind}{%
+    \renewcommand{\lstlistoflistings}{\tocfile{\lstlistlistingname}{lol}}%
+  }{}%
+}
+\makeatother
