@@ -46,6 +46,13 @@
 \usepackage{setspace}                    % Control de interlineado
 
 %--------------------------------------------------------------
+%  CÓDIGO Y PSEUDOCÓDIGO
+%  Definiciones propias (estilos/, entornos «codigo» y «código en línea»).
+%  Debe cargarse antes de hyperref. Ver notes/codigo.md.
+%--------------------------------------------------------------
+\input{estilos/codigo}
+
+%--------------------------------------------------------------
 %  ENCABEZADOS, MÁRGENES Y BIBLIOGRAFÍA
 %--------------------------------------------------------------
 \usepackage{fancyhdr}                                                    % Encabezados/pies
@@ -67,6 +74,17 @@ bookmarksnumbered=true,
 pdftitle={Título de la tesis},
 pdfauthor={Jorge Esteban Mendoza Ortiz}
 ]{hyperref}
+
+%--------------------------------------------------------------
+%  REFERENCIAS CRUZADAS
+%  cleveref DEBE cargarse después de hyperref. Los nombres en español de
+%  los listados los registra estilos/codigo.tex por su cuenta; aquí solo
+%  se carga y se ajusta el nombre de las tablas, porque cleveref dice
+%  «cuadro» y el preámbulo usa es-tabla («Tabla»). Ver notes/codigo.md.
+%--------------------------------------------------------------
+\usepackage[spanish]{cleveref}
+\crefname{table}{tabla}{tablas}
+\Crefname{table}{Tabla}{Tablas}
 
 %--------------------------------------------------------------
 %  COMANDOS PERSONALIZADOS
@@ -93,6 +111,13 @@ pdfauthor={Jorge Esteban Mendoza Ortiz}
 %--------------------------------------------------------------
 \setlength{\parskip}{0pt}        % Sin espacio extra entre párrafos
 \setlength{\parindent}{1.5em}    % Sangría tradicional en español
+%  Convención de párrafos (decidida el 2026-09-14): sangría en TODOS los
+%  párrafos y ningún espacio vertical entre ellos. babel-spanish ya indenta
+%  el primer párrafo tras un título, así que no hace falta indentfirst; lo
+%  que hay que vigilar es (a) que ningún \parskip se cuele más adelante —ver
+%  el material preliminar— y (b) que la sangría no la suprima un entorno:
+%  después de center, itemize, quote, etc. LaTeX la quita. Para más aire, el
+%  parámetro correcto es el interlineado (setspace), no el hueco de párrafo.
 \captionsetup{font=small, labelfont={bf}, margin=2.5cm, format=hang}
 
 %--------------------------------------------------------------
@@ -171,12 +196,18 @@ pdfauthor={Jorge Esteban Mendoza Ortiz}
 		\fancyfoot[LE,RO]{\thepage}
 	}
 	
-	% Sin parskip extra en los índices
-	\setlength{\parskip}{0ex plus 0.5ex minus 0.2ex}
-	
-	\tableofcontents
-	\listoffigures
-	\listoftables
+	% Los índices pueden estirarse un poco para que no queden cajas mal
+	% justificadas. Va EN UN GRUPO a propósito: fuera de él rige el
+	% \parskip = 0pt del preámbulo. Sin el grupo se filtra a toda la tesis
+	% y los saltos entre párrafos salen desiguales en las páginas que TeX
+	% necesita estirar (defecto detectado y corregido el 2026-09-14).
+	{%
+		\setlength{\parskip}{0ex plus 0.5ex minus 0.2ex}%
+		\tableofcontents
+		\listoffigures
+		\listoftables
+		\lstlistoflistings
+	}
 	
 	\include{includes/resumen}
 	\include{includes/summary}
