@@ -142,12 +142,33 @@
   pages     = {395--404},
   year      = {2017}
 }
+% Nota: biblatex-apa solo imprime «En Editores (Eds.), Actas (pp. …). Editorial»
+% si la entrada lleva el campo editor; sin él cae a una forma tipo artículo y se
+% pierden la editorial y las páginas entre paréntesis. El DOI es obligatorio en
+% APA 7 cuando existe (y sustituye al URL). La sede editorial ya no se usa en APA 7.
 @inproceedings{messirve-ValentiniEtAl2025,
   title     = {Messirve: A large-scale spanish information retrieval dataset},
   author    = {Valentini, Francisco and Cotik, Viviana and Furman, Dami{\'a}n and Bercovich, Ivan and Altszyler, Edgar and P{\'e}rez, Juan Manuel},
   booktitle = {Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing},
   pages     = {27740--27757},
+  editor    = {Christodoulopoulos, Christos and Chakraborty, Tanmoy and Rose, Carolyn and Peng, Violet},
+  publisher = {Association for Computational Linguistics},
+  doi       = {10.18653/v1/2025.emnlp-main.1412},
   year      = {2025}
+}
+
+% Conjunto de datos: es una fuente distinta del artículo (el artículo lo
+% describe; este es el material que se usó). El año es el de la versión
+% utilizada, la v1.2, publicada en julio de 2025. La clave sigue el esquema
+% <tema>-<Repositorio><Año> propio de los recursos web (ver AGENTS.md).
+@online{messirve-HuggingFace2025,
+  title        = {MessIRve},
+  author       = {Valentini, Francisco and Cotik, Viviana and Furman, Dami{\'a}n and Bercovich, Ivan and Altszyler, Edgar and P{\'e}rez, Juan Manuel},
+  year         = {2025},
+  version      = {Versión 1.2},
+  organization = {Hugging Face},
+  note         = {Conjunto de datos},
+  url          = {https://huggingface.co/datasets/spanish-ir/messirve}
 }
 
 @inproceedings{significancia-UrbanoEtAl2019,
