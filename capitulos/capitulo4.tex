@@ -7,22 +7,25 @@ En este capítulo se describe el marco metodológico de este trabajo de tesis.
 % - Distribución de relevantes por consulta (calculada en el análisis de distribuciones; justifica la batería de métricas)
 % - Partición usada (entrenamiento/prueba por artículo de Wikipedia; restricciones del conjunto de prueba)
 % P1: Qué es MessIRve y de dónde sale: consultas reales de usuarios (obtenidas con la API de autocompletado de Google) emparejadas con pasajes de la Wikipedia en español; quién lo publicó, con cita al artículo del dataset (ver notes/fuentes.md). Cerrar con por qué es el conjunto adecuado para esta tesis: español nativo, no traducido (contraste con el «translationese» de mMARCO-es; remite a §3.4).
-%   - Qué es: conjunto de RI en español a gran escala; cada instancia es un par (consulta real de usuario, párrafo relevante de la Wikipedia en español).
-MessIRve \parencite{messirve-ValentiniEtAl2025} es un conjunto de datos de gran escala creado para evaluar RI en español diseñado para satisfacer mejor las necesidades de hablantes de la lengua española en diferentes países. Cada instancia del conjunto de datos es un par de una consulta y un párrafo relevante de la Wikipedia en español. Para ver un ejemplo refiérase al \cref{lst:entrada-ej}.
+MessIRve \parencite{messirve-ValentiniEtAl2025} es un conjunto de datos de gran escala creado para evaluar RI en español diseñado para satisfacer mejor las necesidades de hablantes de la lengua española en diferentes países. Cada instancia del conjunto de datos es un par de una consulta y un documento relevante que es un párrafo de la Wikipedia en español. Para ver un ejemplo refiérase al \cref{lst:entrada-ej}.
 
-Las consultas fueron obtenidas a partir de la API de autocompletado de Google, a partir de 120 prefijos semilla (``qué'', ``cómo'', ``dónde'', ``quién'', \ldots). La API no siempre responde con consultas que empiezan estrictamente con los prefijos dados, y por tanto no todas las consultas comienzan con alguno de los prefijos. Las extracciones se realizaron entre marzo y abril de 2024, por lo que estas podrían reflejar los intereses populares de este periodo.
+Las consultas fueron obtenidas a partir de la \textit{API} de autocompletado de Google, a partir de 120 prefijos semilla (``qué'', ``cómo'', ``dónde'', ``quién'', \ldots). La \textit{API} no siempre responde con consultas que empiezan estrictamente con los prefijos dados, y por tanto no todas las consultas comienzan con alguno de los prefijos. Los autores expandieron iterativamente el conjunto de prefijos basados en los resultados obtenidos por la \textit{API} hasta obtener aproximadamente el número predefinido de consultas deseado. Las consultas así obtenidas están escritas en lenguaje natural y pueden contener errores gramaticales y ortográficos; por ejemplo, la consulta ``porque se llama bogota'' (¿por qué se llama Bogotá?) está incluída aunque le falten acentos, signos de interrogación, mayúscula, etc.
 
-Los documentos en este conjunto de datos son párrafos de artículos de la Wikipedia en español. En particular, los documentos relevantes son los ``\textit{featured snippets}'' de \textit{Google Search} que enlazan a la Wikipedia en español. Los autores descartaron las consultas que no devolvieran ``\textit{featured snippets}'' de la Wikipedia en español. 
+Los documentos en este conjunto de datos son párrafos de artículos de la Wikipedia en español.\footnote{Cada entrada en MessIRve contiene un campo \cod{docid} de la forma \cod{id\_del\_artículo#id\_del\_párrafo} como puede observarse en el \cref{lst:entrada-ej}.} En particular, los documentos relevantes son \textit{featured snippets} de \textit{Google Search} que enlazan a la Wikipedia en español. Los autores descartaron las consultas que no devolvieran \textit{featured snippets} de la Wikipedia en español. 
 
-El proceso de extracción de consultas se realizó para 20 países con español como lengua oficial más Estados Unidos. Guinea Ecuatorial quedó fuera por no tener un dominio de Google. Además, en este proceso se encontraron consultas no específicas de algún país, a las que asignaron la etiqueta ``\textit{none}''. La unión de dichas consultas con las consultas de todos los demás países se denomina ``\textit{full}''.
+El proceso de extracción de consultas se realizó para 20 países con español como lengua oficial más Estados Unidos. Guinea Ecuatorial quedó excluída por no tener un dominio de Google. Además, en este proceso se encontraron consultas no específicas de algún país, a las que asignaron la etiqueta ``\textit{no\_country}''. La unión de dichas consultas con las consultas de todos los demás países se denomina ``\textit{full}''. Las extracciones se realizaron entre marzo y junio de 2024, por lo que estas podrían reflejar los intereses populares de dicho periodo. 
 
-%   - Origen de las consultas: API de autocompletado de Google (www.google.com/complete/search), a partir de 120 prefijos semilla («qué», «cómo», «dónde», «quién», …) expandidos iterativamente; extracción entre marzo y abril de 2024 (las consultas reflejan intereses populares de ese periodo).
-%   - Origen de los documentos relevantes: respuestas de los «featured snippets» de Google Search que enlazan a la Wikipedia en español. Estrategia de recolección inspirada en GooAQ (mención sin cita: no entra en la bibliografía).
-%   - Autores y publicación: Valentini, Cotik, Furman, Bercovich, Altszyler y Pérez, EMNLP 2025 → \parencite{messirve-ValentiniEtAl2025} (la clave ya existe en biblio.bib).
-%   - Cobertura dialectal: 20 países con español como lengua oficial más Estados Unidos; Guinea Ecuatorial quedó fuera por no tener dominio de Google. El subconjunto «full» combina las consultas no específicas de país (etiqueta «none») con la unión de las consultas de todos los países.
-%   - Versión utilizada: 1.2. La actualización de julio de 2025 publicó a la vez la v1.1 (~200 000 consultas nuevas respecto de la v1.0) y la v1.2 (que añade los títulos de artículo como columnas); nosotros trabajamos con la v1.2.
-%   - Cierre: por qué es adecuado para esta tesis — español nativo, no traducido (contraste con el «translationese» de mMARCO-es; remite a §3.4); consultas reales de usuarios; diversidad dialectal documentada (ejemplos del artículo: «green» por la Green Card en EE. UU., «checar» en México).
-%   - Opcional: licencia CC BY-NC 4.0 (una línea si se considera pertinente).
+Las parejas consulta--documento además se dividieron en un conjunto de entrenamiento y otro de prueba de tal modo que el artículo de la Wikipedia al que pertenece cualquier párrafo relevante dado sea parte de solo una de las divisiones: ésto con el objetivo de reducir la intersección de tópicos entre los conjuntos de entrenamiento y prueba. El particionado se realizó por país, asignando aproximadamente 20\% de los artículos al conjunto de prueba. 
+% TODO: considera mover la siguiente línea más adelante
+En nuestros experimentos utilizamos únicamente el conjunto de prueba ``\textit{full}'', porque los autores de MessIRve solo reportaron sus experimentos en esta división.
+
+El conjunto de datos fue presentado oficialmente por los autores \textcite{messirve-ValentiniEtAl2025} durante \textit{The 2025 Conference on Empirical Methods in Natural Language Processing} de la \textit{Association of Computational Linguistics} llevada a cabo del 4 al 5 de noviembre del 2025 en Suzhou, China. Los datos están disponibles en Hugging Face \parencite{messirve-HuggingFace2025}\footnote{\url{https://huggingface.co/datasets/spanish-ir/messirve}} bajo la licencia Creative Commons BY-NC 4.0\footnote{\url{https://creativecommons.org/licenses/by-nc/4.0/}}. Para este proyecto utilizamos la versión 1.2 publicada en julio del 2025.
+
+Consideramos que MessIRve es adecuado para esta tesis porque: \begin{enumerate*}[label=(\roman*)]
+	\item las consultas son textos reales escritos por hablantes nativos usando lenguaje natural
+	\item las consultas y documentos son representativos de variantes dialectales de la lengua española en múltiples países que otros conjuntos de datos ignoran o no documentan
+	\item MessIRve es el conjunto más grande de consultas y documentos no traducidos disponible durante la realización de este proyecto.
+\end{enumerate*}
 
 \begin{codigoflotante}[js, label={lst:entrada-ej}]{Ejemplo de una instancia del conjunto de datos MessIRve}
 {
@@ -39,6 +42,8 @@ El proceso de extracción de consultas se realizó para 20 países con español 
 	"id_country": 980799.0
 }
 \end{codigoflotante}
+
+MessIRve tiene, en su versión 1.2, 940,374 consultas totales. 
 
 % P2: Cifras del conjunto: ~700 000 consultas; tamaño del corpus eswiki_20240401 (párrafos de la Wikipedia en español, volcado de abril de 2024); número de juicios de relevancia y su escala [verificar en el artículo si son binarios o graduados]; variedades dialectales cubiertas. [Considerar una tabla resumen del conjunto de datos.]
 %   - Cifras del split de prueba, subconjunto «full», v1.2 (fuente: ir-spanish/analysis/distributions.ipynb):

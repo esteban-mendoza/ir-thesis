@@ -35,7 +35,7 @@
 \usepackage{subcaption}                  % Subfiguras (sustituye al obsoleto subfig)
 \usepackage{caption}                     % Personalización de pies
 \usepackage{booktabs, array, tabularx}   % Tablas profesionales
-\usepackage{enumitem}                    % Listas personalizables
+\usepackage[inline]{enumitem}            % Listas personalizables + listas en línea (enumerate*, itemize*)
 \usepackage{epigraph}                    % Citas al inicio de capítulos
 \usepackage{verbatim}                    % Mejora \verbatim
 \usepackage{url}                         % Formateo de URLs
@@ -51,6 +51,14 @@
 %  Debe cargarse antes de hyperref. Ver notes/codigo.md.
 %--------------------------------------------------------------
 \input{estilos/codigo}
+
+%--------------------------------------------------------------
+%  LISTAS
+%  Configuración de enumitem (ya cargado arriba) coherente con el formato
+%  de párrafo. Para volver al aspecto por defecto de LaTeX, comenta la
+%  línea siguiente: nada más depende de ese archivo.
+%--------------------------------------------------------------
+\input{estilos/listas}
 
 %--------------------------------------------------------------
 %  ENCABEZADOS, MÁRGENES Y BIBLIOGRAFÍA
