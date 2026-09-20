@@ -3,16 +3,9 @@
 ## Pendientes
 
 - Tesis
-  - Explicar BM25 y Splade en la misma sección de fundamentos para modelos léxicos
-  - Mover tokenizers antes de arquitectura transformer
-  - Eliminar sección 3.3.5: Embeddings guiados por instrucciones
-  - Eliminar 3.4.6 Funciones de puntuación: propiedades y motivación de la fusión
-  - Considerar remover 3.5.2 Fine-tuning eficiente: aproximaciones de bajo rango (LoRA)
   - Investigar sobre 3.8.3 Similitud entre listas de ranking (Kendall τ vs RBO) — **resuelto**: RBO (Webber et al., 2010); Kendall τ exige listas conjuntas. Ver indice.md §5.5
-  - Eliminar 3.8.4 Búsqueda eficiente: ANN, HNSW, IVF, búsqueda multi-vector 
-  - Revisar cada modelo representativo para determinar sus características
-    - Determinar un conjunto mínimo de elementos teóricos que agregar
-  - Estudiar distribución del número de documentos relevantes por query para explicar métricas
+  - Agregar un apéndice con estadísticas descriptivas de MessIRve
+    - Estudiar distribución del número de documentos relevantes por query para explicar métricas
   - Revisar resultados y métodos:
     - Artículos utilizando MessIRve
     - MTEB y La Leaderboard
