@@ -1,0 +1,75 @@
+%==============================================================
+%  estilos/listas.tex
+%  Configuración de listas con enumitem, coherente con la convención de
+%  párrafos de la tesis: sangría en todos los párrafos y ningún espacio
+%  vertical entre ellos (ver «Formato de párrafo» en tesis.tex).
+%
+%  Se carga desde el preámbulo con  \input{estilos/listas}
+%
+%  PARA VOLVER AL ASPECTO POR DEFECTO DE LaTeX: comenta esa línea en
+%  tesis.tex. Ninguna otra parte del documento depende de este archivo.
+%
+%  Medido en el PDF con la geometría de la tesis (pdftotext -bbox,
+%  márgenes de 96.38 pt y sangría de párrafo de 112.65 pt):
+%    antes y después del bloque:  11.95 pt por defecto  ->  6.77 pt
+%    entre reactivos:              8.96 pt por defecto  ->  3.39 pt
+%    cuerpo del reactivo:        123.65 pt por defecto  ->  112.74 pt
+%                                (= la sangría del párrafo, 1.5em)
+%==============================================================
+
+%--------------------------------------------------------------
+%  ESPACIADO VERTICAL
+%  parsep = 0 porque en este documento no hay espacio entre párrafos;
+%  media línea antes y después del bloque para separarlo del texto, y un
+%  cuarto de línea entre reactivos. partopsep = 0 evita el espacio doble
+%  cuando la lista abre un párrafo nuevo.
+%--------------------------------------------------------------
+\setlist{
+  topsep    = 0.5\baselineskip,
+  partopsep = 0pt,
+  itemsep   = 0.25\baselineskip,
+  parsep    = 0pt,
+}
+
+%--------------------------------------------------------------
+%  INDENTACIÓN HORIZONTAL (itemize y enumerate)
+%  El cuerpo del reactivo se alinea con la sangría de los párrafos y el
+%  marcador cuelga en el margen. Está atado a \parindent (1.5em), así que
+%  si algún día cambia la sangría, la lista la sigue sola.
+%--------------------------------------------------------------
+\setlist[itemize,enumerate]{
+  labelindent = 0pt,
+  leftmargin  = \parindent,
+  labelsep    = 0.5em,
+}
+
+% Sublistas más compactas: menos aire arriba y entre reactivos.
+\setlist[itemize,enumerate,2]{
+  topsep     = 0.25\baselineskip,
+  itemsep    = 0.1\baselineskip,
+  leftmargin = *,
+}
+
+% Las descripciones heredan el espaciado vertical de arriba y conservan su
+% formato por defecto (rótulo en negrita seguido del texto). Si algún día
+% se quiere el cuerpo alineado como en itemize y enumerate, añade aquí:
+%   \setlist[description]{leftmargin=\parindent, labelsep=0.5em}
+
+%--------------------------------------------------------------
+%  LISTAS EN LÍNEA (enumerate*, itemize*)
+%  Requieren que enumitem se cargue con la opción `inline`, que ya está en
+%  el preámbulo. Separadores en español: «(i) A, (ii) B y (iii) C».
+%
+%  Dos trampas de sintaxis, ambas comprobadas:
+%   - La configuración va con ASTERISCO en \setlist, no en el nombre del
+%     entorno:  \setlist*[enumerate]{...}   (no \setlist[enumerate*]{...},
+%     que da «Missing number, treated as zero»).
+%   - El espacio inicial de un valor se pierde si va entre llaves, así que
+%     « y » hay que escribirlo «\ y\ » (con espacio de control).
+%
+%  Si los reactivos llevan comas internas, conviene separarlos con punto y
+%  coma; pásalo localmente en esa lista:
+%      \begin{enumerate*}[label=(\roman*), itemjoin={;\ }, itemjoin*={;\ y\ }]
+%--------------------------------------------------------------
+\setlist*[enumerate]{itemjoin={,\ }, itemjoin*={\ y\ }}
+\setlist*[itemize]{itemjoin={,\ }, itemjoin*={\ y\ }}
