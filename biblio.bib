@@ -171,6 +171,27 @@
   url          = {https://huggingface.co/datasets/spanish-ir/messirve}
 }
 
+% Conjunto de datos: el corpus de documentos de MessIRve (párrafos de la
+% Wikipedia en español), fuente distinta del artículo y del conjunto de juicios.
+% Se titula con el identificador del repositorio y no con el `pretty_name` de la
+% tarjeta («MessIRve (corpus)»), por decisión del usuario: así la referencia dice
+% de qué volcado se trata sin abrir la liga. La autoría es la misma que la del
+% conjunto de juicios, porque el corpus es parte de MessIRve. No lleva campo
+% `version` porque el repositorio no tiene etiquetas de versión (una sola
+% revisión en `main`, fe9f26a, sin cambios desde el 2024-09-11), así que el año
+% es el de la publicación del volcado procesado (2024-04-01). La clave sigue el
+% esquema <tema>-<Repositorio><Año> propio de los recursos web (ver AGENTS.md).
+% Los guiones bajos van escapados: sin `\_`, LaTeX los lee como subíndice
+% matemático y aborta con «Missing $ inserted».
+@online{eswiki-HuggingFace2024,
+  title        = {eswiki\_20240401\_corpus},
+  author       = {Valentini, Francisco and Cotik, Viviana and Furman, Dami{\'a}n and Bercovich, Ivan and Altszyler, Edgar and P{\'e}rez, Juan Manuel},
+  year         = {2024},
+  organization = {Hugging Face},
+  note         = {Conjunto de datos},
+  url          = {https://huggingface.co/datasets/spanish-ir/eswiki_20240401_corpus}
+}
+
 @inproceedings{significancia-UrbanoEtAl2019,
   title     = {Statistical significance testing in information retrieval: an empirical analysis of type I, type II and type III errors},
   author    = {Urbano, Juli{\'a}n and Lima, Harlley and Hanjalic, Alan},

@@ -3,21 +3,17 @@
 En este capítulo se describe el marco metodológico de este trabajo de tesis.
 
 \section{El conjunto de datos MessIRve}\label{sec:metodologia-dataset}
-% - Cifras: consultas, documentos, juicios, variedades dialectales
-% - Distribución de relevantes por consulta (calculada en el análisis de distribuciones; justifica la batería de métricas)
-% - Partición usada (entrenamiento/prueba por artículo de Wikipedia; restricciones del conjunto de prueba)
-% P1: Qué es MessIRve y de dónde sale: consultas reales de usuarios (obtenidas con la API de autocompletado de Google) emparejadas con pasajes de la Wikipedia en español; quién lo publicó, con cita al artículo del dataset (ver notes/fuentes.md). Cerrar con por qué es el conjunto adecuado para esta tesis: español nativo, no traducido (contraste con el «translationese» de mMARCO-es; remite a §3.4).
-MessIRve \parencite{messirve-ValentiniEtAl2025} es un conjunto de datos de gran escala creado para evaluar RI en español diseñado para satisfacer mejor las necesidades de hablantes de la lengua española en diferentes países. Cada instancia del conjunto de datos es un par de una consulta y un documento relevante que es un párrafo de la Wikipedia en español. Para ver un ejemplo refiérase al \cref{lst:entrada-ej}.
+MessIRve \parencite{messirve-ValentiniEtAl2025} es un conjunto de datos de gran escala creado para evaluar RI en español diseñado para satisfacer mejor las necesidades de hablantes de la lengua española en diferentes países. Cada instancia del conjunto de datos es un objeto tipo JSON que incluye un par de una consulta y un documento relevante que es un párrafo de la Wikipedia en español además de otros campos de metadatos. Para ver un ejemplo refiérase al \cref{lst:entrada-ej}.
 
-Las consultas fueron obtenidas a partir de la \textit{API} de autocompletado de Google, a partir de 120 prefijos semilla (``qué'', ``cómo'', ``dónde'', ``quién'', \ldots). La \textit{API} no siempre responde con consultas que empiezan estrictamente con los prefijos dados, y por tanto no todas las consultas comienzan con alguno de los prefijos. Los autores expandieron iterativamente el conjunto de prefijos basados en los resultados obtenidos por la \textit{API} hasta obtener aproximadamente el número predefinido de consultas deseado. Las consultas así obtenidas están escritas en lenguaje natural y pueden contener errores gramaticales y ortográficos; por ejemplo, la consulta ``porque se llama bogota'' (¿por qué se llama Bogotá?) está incluída aunque le falten acentos, signos de interrogación, mayúscula, etc.
+Las consultas fueron obtenidas a partir de la API de autocompletado de Google, a partir de 120 prefijos semilla (``qué'', ``cómo'', ``dónde'', ``quién'', \ldots). La API no siempre responde con consultas que empiezan estrictamente con los prefijos dados, y por tanto no todas las consultas comienzan con alguno de los prefijos. Los autores expandieron iterativamente el conjunto de prefijos basados en los resultados obtenidos por la API hasta obtener aproximadamente el número predefinido de consultas deseado. Las consultas así obtenidas están escritas en lenguaje natural y pueden contener errores gramaticales y ortográficos; por ejemplo, la consulta ``porque se llama bogota'' (¿por qué se llama Bogotá?) está incluída aunque le falten acentos, signos de interrogación, mayúscula, etc.
 
-Los documentos en este conjunto de datos son párrafos de artículos de la Wikipedia en español.\footnote{Cada entrada en MessIRve contiene un campo \cod{docid} de la forma \cod{id\_del\_artículo#id\_del\_párrafo} como puede observarse en el \cref{lst:entrada-ej}.} En particular, los documentos relevantes son \textit{featured snippets} de \textit{Google Search} que enlazan a la Wikipedia en español. Los autores descartaron las consultas que no devolvieran \textit{featured snippets} de la Wikipedia en español. 
+Los documentos en este conjunto de datos son párrafos de artículos de la Wikipedia en español en su extracto de abril del 2024.\footnote{Cada entrada en MessIRve contiene un campo \cod{docid} de la forma \cod{id\_del\_artículo#id\_del\_párrafo} como puede observarse en el \cref{lst:entrada-ej}.} En particular, los documentos relevantes son \textit{featured snippets} de \textit{Google Search} que enlazan a la Wikipedia en español. Los autores descartaron las consultas que no devolvieran \textit{featured snippets} de la Wikipedia en español. 
 
-El proceso de extracción de consultas se realizó para 20 países con español como lengua oficial más Estados Unidos. Guinea Ecuatorial quedó excluída por no tener un dominio de Google. Además, en este proceso se encontraron consultas no específicas de algún país, a las que asignaron la etiqueta ``\textit{no\_country}''. La unión de dichas consultas con las consultas de todos los demás países se denomina ``\textit{full}''. Las extracciones se realizaron entre marzo y junio de 2024, por lo que estas podrían reflejar los intereses populares de dicho periodo. 
+El proceso de extracción de consultas se realizó para 20 países con español como lengua oficial más Estados Unidos. Guinea Ecuatorial quedó excluída por no tener un dominio de Google. Además, en este proceso se encontraron consultas no específicas de algún país, a las que asignaron la etiqueta \cod{no_country}. La unión de dichas consultas con las consultas de todos los demás países se denomina \cod{full}. Las extracciones se realizaron entre marzo y junio de 2024, por lo que estas podrían reflejar los intereses populares de dicho periodo. 
 
 Las parejas consulta--documento además se dividieron en un conjunto de entrenamiento y otro de prueba de tal modo que el artículo de la Wikipedia al que pertenece cualquier párrafo relevante dado sea parte de solo una de las divisiones: ésto con el objetivo de reducir la intersección de tópicos entre los conjuntos de entrenamiento y prueba. El particionado se realizó por país, asignando aproximadamente 20\% de los artículos al conjunto de prueba. 
 % TODO: considera mover la siguiente línea más adelante
-En nuestros experimentos utilizamos únicamente el conjunto de prueba ``\textit{full}'', porque los autores de MessIRve solo reportaron sus experimentos en esta división.
+En nuestros experimentos utilizamos únicamente el conjunto de prueba \cod{full}, porque los autores de MessIRve solo reportaron sus experimentos en esta división.
 
 El conjunto de datos fue presentado oficialmente por los autores \textcite{messirve-ValentiniEtAl2025} durante \textit{The 2025 Conference on Empirical Methods in Natural Language Processing} de la \textit{Association of Computational Linguistics} llevada a cabo del 4 al 5 de noviembre del 2025 en Suzhou, China. Los datos están disponibles en Hugging Face \parencite{messirve-HuggingFace2025}\footnote{\url{https://huggingface.co/datasets/spanish-ir/messirve}} bajo la licencia Creative Commons BY-NC 4.0\footnote{\url{https://creativecommons.org/licenses/by-nc/4.0/}}. Para este proyecto utilizamos la versión 1.2 publicada en julio del 2025.
 
@@ -43,20 +39,50 @@ Consideramos que MessIRve es adecuado para esta tesis porque: \begin{enumerate*}
 }
 \end{codigoflotante}
 
-MessIRve tiene, en su versión 1.2, 940,374 consultas totales. 
+\subsection{Estadísticas del conjunto de datos}
+El subconjunto \cod{full} de MessIRve tiene, en su versión 1.2, 878\,428 consultas únicas y 940\,374 juicios de relevancia totales, distribuidos entre las particiones de entrenamiento y prueba. Refiérase a la \cref{tab:messirve-particiones} para más detalles de su composición.
 
-% P2: Cifras del conjunto: ~700 000 consultas; tamaño del corpus eswiki_20240401 (párrafos de la Wikipedia en español, volcado de abril de 2024); número de juicios de relevancia y su escala [verificar en el artículo si son binarios o graduados]; variedades dialectales cubiertas. [Considerar una tabla resumen del conjunto de datos.]
-%   - Cifras del split de prueba, subconjunto «full», v1.2 (fuente: ir-spanish/analysis/distributions.ipynb):
-%       • 174 078 filas = pares (consulta, documento relevante), i.e. juicios de relevancia;
-%       • 170 055 consultas únicas;
-%       • 69 001 documentos relevantes únicos (un documento = un párrafo; docid de la forma «artículo#párrafo», p. ej. «129493#38»);
-%       • 51 190 artículos de Wikipedia que aportan esos párrafos.
-%   - Corpus: eswiki_20240401, volcado de la Wikipedia en español de abril de 2024: 14 047 759 párrafos de 1 946 205 artículos (dataset aparte: spanish-ir/eswiki_20240401_corpus).
-%   - Escala de los juicios [resuelto]: match_score es continuo en [0.5, 1] (proporción de la respuesta del SERP contenida como subcadena en el texto del documento), PERO en el split de prueba match_score = 1 siempre (y expanded_search = False), así que los juicios de prueba son en la práctica binarios (relevante / no relevante).
-%   - Longitudes en palabras (notebook): consultas — mín 3, máx 22, media 5.70, mediana 5, P99 = 12; documentos relevantes (título + texto) — mín 5, máx 2 226, media 79.35, mediana 68; corpus completo — media 59.41, mediana 47.
-%   - Ejemplo concreto para ilustrar el formato (del notebook): consulta «a cual movimiento literario pertenece fabio fiallo» → párrafo «129493#38» del artículo «Literatura de la República Dominicana», answer_type = feat_snip.
-%   - Cifra global del artículo (v1.0): el resumen reporta «casi 700 000 consultas» (train + test); la v1.1 añadió ~200 000. [VERIFICAR: si se quiere citar el total actual de la v1.2 hay que calcularlo (train + test); el notebook solo cubre el split de prueba.]
-%   - [Sugerencia: tabla resumen del conjunto — consultas únicas, juicios, documentos relevantes, artículos y longitudes medias del split de prueba; opcionalmente una fila para el corpus.]
+\begin{table}[tbp]
+	\centering
+	\begin{tabular}{@{}lcccc@{}}
+		\toprule
+		Partición & \shortstack{Consultas\\únicas} & \shortstack{Documentos\\relevantes únicos} & \shortstack{Artículos\\relevantes únicos} & \shortstack{Filas\\(juicios)} \\
+		\midrule
+		Entrenamiento & 708\,373 & 119\,336 & 45\,158 & 766\,296 \\
+		Prueba        & 170\,055 &  69\,001 & 51\,190 & 174\,078 \\
+		\midrule
+		Total         & 878\,428 & 188\,337 & 96\,348 & 940\,374 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Estadísticas de las particiones del subconjunto \cod{full} de MessIRve (versión 1.2). Las filas son juicios de relevancia (pares consulta--documento); las demás columnas son conteos de elementos únicos: un documento es un párrafo de la Wikipedia en español y un artículo es el artículo que lo contiene.}
+	\label{tab:messirve-particiones}
+\end{table}
+
+Los documentos, como explicamos antes, son párrafos de la Wikipedia en español de abril del 2024. Este corpus de documentos fue publicado por los autores de MessIRve y está disponible en Hugging Face \parencite{eswiki-HuggingFace2024}.\footnote{\url{https://huggingface.co/datasets/spanish-ir/eswiki_20240401_corpus}} El corpus consta de 14\,047\,759 párrafos de 1\,946\,205 artículos. 
+
+En MessIRve cada juicio contiene un campo llamado \cod{match_score}: un número continuo en el intervalo $(0.5, 1]$ que denota la relevancia del documento dada la consulta. Nótese que en el subconjunto de prueba \cod{match_score} es siempre 1; en otras palabras, el conjunto de prueba contiene únicamente documentos relevantes. Nosotros consideramos como irrelevantes los documentos que forman parte del extracto de la Wikipedia y que no fueron calificados como relevantes de esta forma.
+
+Para conocer la distribución de la longitud de palabras de las consultas y documentos refiérase a la \cref{tab:messirve-longitudes}. Observe que para los documentos contamos las palabras sobre el título y el texto: ésto es igual que en el sistema de recuperación que utilizamos en nuestros experimentos.
+
+\begin{table}[tbp]
+	\centering
+	\begin{tabular}{@{}lcccccc@{}}
+		\toprule
+		 & Mínimo & Mediana & P95 & P99 & Máximo & \shortstack{Desviación\\estándar} \\
+		\midrule
+		Consultas (prueba)         & 3 & 5  & 9   & 12  & 22     & 1.88 \\
+		Consultas (entrenamiento)  & 2 & 6  & 9   & 12  & 22     & 1.91 \\
+		Documentos (prueba)        & 5 & 68 & 168 & 245 & 2\,226 & 48.49 \\
+		Documentos (entrenamiento) & 5 & 64 & 170 & 252 & 2\,101 & 51.04 \\
+		Documentos (corpus)        & 5 & 47 & 153 & 233 & 9\,757 & 49.51 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Longitud en palabras de las consultas y de los documentos. En los documentos, las palabras se cuentan sobre el título y el texto, igual que en el sistema de recuperación. Las consultas y los documentos relevantes provienen del subconjunto \cod{full} de MessIRve (versión 1.2); el corpus, del volcado de la Wikipedia en español de abril de 2024.}
+	\label{tab:messirve-longitudes}
+\end{table}
+
+
+
 % P3: Distribución del número de documentos relevantes por consulta: media, mediana, desviación estándar y frecuencias (calculadas en ir-spanish/analysis/distributions.ipynb, §4). Explicar cómo esta distribución justifica la batería de métricas adoptada en §4.4 (en particular Recall@100 y P@50).
 %   - Distribución de documentos relevantes por consulta (test, v1.2; notebook §4): mín 1, máx 4, media 1.02, mediana 1, desviación estándar 0.16.
 %   - Frecuencias: 1 relevante → 166 201 consultas (97.73 %); 2 → 3 698 (2.17 %); 3 → 143 (0.084 %); 4 → 13 (0.0076 %).
@@ -67,12 +93,34 @@ MessIRve tiene, en su versión 1.2, 940,374 consultas totales.
 %       • MAP adopta un comportamiento similar al de MRR (con un único relevante, AP = 1/rango del relevante).
 %       • nDCG@10 sigue siendo informativa por su sensibilidad a la posición → de ahí su papel como métrica primaria.
 %   - [Figuras ya generadas por el cuaderno y copiadas a tesis/figuras/ (7 PDF: distribución de relevantes por consulta y longitudes de consultas, de documentos relevantes y del corpus, en train y test); queda pendiente decidir si se incluye alguna en el capítulo. El cuaderno las regenera en ir-spanish/analysis/figures/.]
-% P4: Partición utilizada: 80 % entrenamiento / 20 % prueba, dividida por artículo de Wikipedia; restricciones del conjunto de prueba (match_score = 1, expanded_search = False). Declarar que todos los experimentos del cap. 5 se evalúan exclusivamente sobre esta partición de prueba.
-%   - Partición: entrenamiento / prueba dividida por artículo de Wikipedia — todos los párrafos de un artículo quedan en un solo split; la partición se hizo por país, con ~20 % de los artículos asignados a prueba; objetivo: reducir el traslape temático entre entrenamiento y prueba \parencite{messirve-ValentiniEtAl2025}.
-%   - No existe split de validación: los autores dejan libertad de estrategia (p. ej. validación cruzada) \parencite{messirve-ValentiniEtAl2025}.
-%   - Restricciones del split de prueba: match_score = 1 (emparejamiento exacto del snippet con el documento) y expanded_search = False (sin resultados de «búsqueda expandida» del SERP).
-%   - Declaración: todos los experimentos del cap. 5 se evalúan exclusivamente sobre el split de prueba del subconjunto «full» (v1.2), es decir, 170 055 consultas; el split de entrenamiento no se usó para nada (ni análisis ni ajuste de modelos).
-%   - Reproducibilidad de la carga: datasets.load_dataset("spanish-ir/messirve", "full", revision="1.2")["test"] y spanish-ir/eswiki_20240401_corpus para el corpus.
+
+\begin{table}[tbp]
+	\centering
+	\begin{tabular}{@{}lcccc@{}}
+		\toprule
+		% El rótulo se centra sobre las dos filas del encabezado. Sin el \raisebox, LaTeX lo
+		% alinea con la primera fila (queda 14.65 pt más arriba). El valor está medido sobre
+		% el PDF; la alternativa canónica sería el paquete multirow, que no está instalado
+		% en esta instalación «basic» de TeX Live.
+		\raisebox{-14.65pt}[0pt][0pt]{\shortstack[l]{Documentos\\relevantes}} & \multicolumn{2}{c}{Entrenamiento} & \multicolumn{2}{c}{Prueba} \\
+		\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+		 & Consultas & \% & Consultas & \% \\
+		\midrule
+		1 & 656\,785 & 92.72 & 166\,201 & 97.73 \\
+		2 &  46\,036 &  6.50 &   3\,698 &  2.17 \\
+		3 &   4\,862 &  0.69 &     143 &  0.08 \\
+		4 &     611 &  0.09 &      13 &  0.01 \\
+		5 &      67 &  0.01 &     --- &   --- \\
+		6 &      10 & <0.01 &     --- &   --- \\
+		7 &       2 & <0.01 &     --- &   --- \\
+		\midrule
+		Total & 708\,373 & 100 & 170\,055 & 100 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Distribución del número de documentos relevantes por consulta. Los porcentajes se calculan sobre las consultas de cada partición del subconjunto \cod{full} de MessIRve (versión 1.2); una consulta puede tener más de un documento relevante.}
+	\label{tab:messirve-relevantes-por-consulta}
+\end{table}
+
 
 \section{Sistema de recuperación}\label{sec:metodologia-sistema}
 % - Arquitectura del pipeline: primera etapa + fusión + reordenamiento (figura)
