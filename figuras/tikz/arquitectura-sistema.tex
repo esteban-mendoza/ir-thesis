@@ -15,6 +15,11 @@
 % la salida de la recuperación, no etapas consecutivas: ambas cuelgan de la
 % misma bifurcación y cada una entra a la evaluación por su propia flecha (una
 % por el norte y otra por el este, para que no se empalmen).
+%
+% NOTA: la recuperación depende de los embeddings de documentos y de consultas
+% (ambas cajas apuntan a ella) y el caché de rankings cuelga de ella con una
+% doble flecha (<->): escribe ahí los rankings y los relee si ya existen; no
+% es una etapa del flujo principal.
 \begingroup
 \ifdefined\shorthandoff\shorthandoff{<>}\fi
 \begin{tikzpicture}[
@@ -47,7 +52,7 @@
   \node[etapa] at (55,9)           {Representación};
 
   %% ---------------- Columna 4: recuperación ----------------
-  \node[store] (cache) at (84,0)   {Rankings};
+  \node[store] (cache) at (84,0)   {Caché de\\rankings};
   \node[box]   (retr)  at (84,-19) {Recupe-\\ración};
   \node[etapa] at (84,9)           {Recuperación};
 
@@ -66,9 +71,9 @@
   \draw[->] (messirve.south) |- (verdad.west);
   \draw[->] (docs) -- (demb);
   \draw[->] (qrys) -- (qemb);
-  \draw[->] (demb.east) -- (cache.west);
+  \draw[->] (demb.east) -- ++(6,0) -- ++(0,-11) -| ([xshift=-4mm]retr.north);
   \draw[->] (qemb.east) -- (retr.west);
-  \draw[->] (cache.south) -- (retr.north);
+  \draw[<->] (cache.south) -- (retr.north);
 
   %% ---------------- Aristas: bifurcación en las dos alternativas ----------------
   \draw (retr.east) -- ++(6,0) coordinate (bif);
