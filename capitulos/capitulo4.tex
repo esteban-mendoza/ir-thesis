@@ -125,6 +125,14 @@ En la \cref{tab:messirve-relevantes-por-consulta} podemos observar que alrededor
 %   - Propiedad de la cascada (remite a §2.3): un documento que no entra al top-100 de ninguna lista de entrada no puede aparecer en la lista fusionada ni en la reordenada; de ahí que la primera etapa se evalúe con Recall@100 (cf. §4.4).
 %   - La fusión no requiere inferencia neuronal (opera sobre las listas ya calculadas), a diferencia del reordenamiento: anticipar aquí el contraste de eficiencia que se analiza en el E3.
 %   - La figura del pipeline ya existe (\cref{fig:pipeline}, `figuras/tikz/arquitectura-sistema.tex`, TikZ). Muestra las tres etapas y, además, las fuentes de datos (eswiki, MessIRve), la caché de rankings y la verdad de referencia. **Ojo al redactar:** en la figura la fusión y el reordenamiento son ramas **alternativas**, no etapas consecutivas; el texto debe decir lo mismo (el E3 las compara, no las encadena).
+
+\begin{figure}[tbp]
+	\centering
+	\input{figuras/tikz/arquitectura-sistema}
+	\caption{Arquitectura del sistema de recuperación. Los documentos provienen del corpus de la Wikipedia en español (eswiki) y las consultas y los documentos relevantes, del conjunto de datos MessIRve. La fusión de rangos y el reordenamiento neuronal se evalúan como alternativas sobre la misma lista de candidatos, no como etapas sucesivas.}
+	\label{fig:pipeline}
+\end{figure}
+
 % P2: Los seis modelos de primera etapa: BM25 (léxico); multilingual-e5-large-instruct, BGE-M3, Qwen3-Embedding-0.6B y jina-embeddings-v5-text-small (densos); SPLADE-v3 (disperso aprendido). Tabla de configuración: identificador en Hugging Face, tipo, número de parámetros y longitud máxima de contexto [valores en ir-spanish/README.md y baselines/]. Incluir la nota sobre el límite de ~0.6B parámetros por restricciones de hardware.
 %   - Tabla de configuración (modelo / tipo / parámetros / contexto máx. configurado), con los valores tomados de los scripts de baselines/ (MODEL_MAX_LENGTH) y del README de ir-spanish:
 %       • BM25 — léxico disperso; sin longitud de contexto (modelo de términos); \parencite{bm25-RobertsonZaragoza2009}.
@@ -153,13 +161,6 @@ En la \cref{tab:messirve-relevantes-por-consulta} podemos observar que alrededor
 %   - Pila de software: ranx (fusión, métricas y pruebas de significancia); sentence-transformers (modelos densos, SPLADE y el cross-encoder); pyserini (BM25/Lucene); datasets (carga de MessIRve v1.2 y del corpus eswiki_20240401); faiss-gpu (búsqueda densa exacta); pylate (interacción tardía de ColBERT — falta en la tabla del README de ir-spanish); PyTorch. Versiones mínimas fijadas en requirements.txt (pyserini ≥ 1.5.0, ranx ≥ 0.3.21, sentence-transformers ≥ 5.3.0, pylate ≥ 1.4.0, accelerate ≥ 1.13.0, einops ≥ 0.8.0).
 %   - Hardware: servidor del IIMAS con 2 × NVIDIA RTX A5000 (24 GB de VRAM cada una), CUDA 12.2, driver 535.154.05.
 %   - Reproducibilidad: semilla 42 en todos los scripts; caché en disco de embeddings, qrels podados y runs (formato ranx comprimido) para que las reejecuciones sean idénticas; configuración de datos fija (subconjunto full, versión 1.2, partición de prueba).
-
-\begin{figure}[tbp]
-	\centering
-	\input{figuras/tikz/arquitectura-sistema}
-	\caption{Arquitectura del sistema de recuperación. Los documentos provienen del corpus de la Wikipedia en español (eswiki) y las consultas y los documentos relevantes, del conjunto de datos MessIRve. La fusión de rangos y el reordenamiento neuronal se evalúan como alternativas sobre la misma lista de candidatos, no como etapas sucesivas.}
-	\label{fig:pipeline}
-\end{figure}
 
 \section{Algoritmos de fusión}\label{sec:metodologia-fusion}
 % - Los seis con sus parámetros: CombMNZ, BordaFuse, Condorcet, RRF, ISR (Inverse Square Rank), RBC (Rank-Biased Centroids)

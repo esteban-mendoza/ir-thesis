@@ -10,6 +10,11 @@
 % (Reordenamiento, Recuperación) desbordaban su caja y LaTeX avisaba de
 % \overfull \hbox aunque la figura cupiera en la página. Las que no caben se
 % parten a mano con «-» (Reordena-/miento, Recupe-/ración).
+%
+% NOTA: la fusión de rangos y el reordenamiento neuronal son ALTERNATIVAS sobre
+% la salida de la recuperación, no etapas consecutivas: ambas cuelgan de la
+% misma bifurcación y cada una entra a la evaluación por su propia flecha (una
+% por el norte y otra por el este, para que no se empalmen).
 \begingroup
 \ifdefined\shorthandoff\shorthandoff{<>}\fi
 \begin{tikzpicture}[
@@ -27,44 +32,53 @@
   every edge/.style = {draw, ->, rounded corners=2mm}
 ]
 
-  %% ---------------- Fila 1: fuentes de datos ----------------
-  \node[src] (fuentes) at (0,0) {eswiki\\+\\MessIRve};
+  %% ---------------- Columna 1: fuentes de datos ----------------
+  \node[src] (eswiki)   at (0,0)   {eswiki};
+  \node[src] (messirve) at (0,-19) {MessIRve};
   \node[etapa] at (0,9)            {Datos};
 
-  %% ---------------- Fila 2: almacenes y representación ----------------
+  %% ---------------- Columna 2: almacenes ----------------
   \node[store] (docs) at (27,0)    {Documentos};
   \node[store] (qrys) at (27,-19)  {Consultas};
+
+  %% ---------------- Columna 3: representación ----------------
   \node[box]   (demb) at (55,0)    {Embeddings\\de docs.};
   \node[box]   (qemb) at (55,-19)  {Embeddings\\de consultas};
   \node[etapa] at (55,9)           {Representación};
 
-  %% ---------------- Fila 3: recuperación ----------------
+  %% ---------------- Columna 4: recuperación ----------------
   \node[store] (cache) at (84,0)   {Rankings};
   \node[box]   (retr)  at (84,-19) {Recupe-\\ración};
   \node[etapa] at (84,9)           {Recuperación};
 
-  %% ---------------- Fila 4: alternativas ----------------
+  %% ---------------- Columna 5: alternativas ----------------
   \node[box] (fus) at (109,0)      {Fusión\\de rangos};
   \node[box] (rer) at (109,-19)    {Reordena-\\miento\\neuronal};
   \node[etapa] at (109,10.5)       {Alternativas};
-  \node[gt]  (verdad) at (136,-19) {Verdad de\\referencia};
 
-  %% ---------------- Fila 5: evaluación ----------------
-  \node[box] (eval) at (109,-42)   {Evaluación};
+  %% ---------------- Verdad de referencia y evaluación ----------------
+  \node[gt]  (verdad) at (27,-42)  {Verdad de\\referencia};
+  \node[box] (eval)   at (109,-42) {Evaluación};
 
-  %% ---------------- Aristas ----------------
-  \draw[->] (fuentes) -- (docs);
-  \draw[->] (fuentes.south) |- (qrys.west);
+  %% ---------------- Aristas: flujo principal ----------------
+  \draw[->] (eswiki) -- (docs);
+  \draw[->] (messirve) -- (qrys);
+  \draw[->] (messirve.south) |- (verdad.west);
   \draw[->] (docs) -- (demb);
   \draw[->] (qrys) -- (qemb);
   \draw[->] (demb.east) -- (cache.west);
   \draw[->] (qemb.east) -- (retr.west);
   \draw[->] (cache.south) -- (retr.north);
-  \draw[->] (retr.east) -- (fus.west);
-  \draw[->] (fus.south) -- (rer.north);
-  \draw[->] (fus.east) -- (eval.north east);
-  \draw[->] (rer.east) -- (eval.east);
-  \draw[->, dashed] (verdad) -- (eval);
+
+  %% ---------------- Aristas: bifurcación en las dos alternativas ----------------
+  \draw (retr.east) -- ++(6,0) coordinate (bif);
+  \draw[->] (bif) |- (fus.west);
+  \draw[->] (bif) -- (rer.west);
+
+  %% ---------------- Aristas: evaluación ----------------
+  \draw[->] (rer.south) -- (eval.north);
+  \draw[->] (fus.east) -- ++(9,0) |- (eval.east);
+  \draw[->, dashed] (verdad.east) -- (eval.west);
 
 \end{tikzpicture}
 \endgroup
