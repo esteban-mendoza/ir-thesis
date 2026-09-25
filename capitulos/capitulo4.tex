@@ -11,9 +11,9 @@ Los documentos en este conjunto de datos son párrafos de artículos de la Wikip
 
 El proceso de extracción de consultas se realizó para 20 países con español como lengua oficial más Estados Unidos. Guinea Ecuatorial quedó excluída por no tener un dominio de Google. Además, en este proceso se encontraron consultas no específicas de algún país, a las que asignaron la etiqueta \cod{no_country}. La unión de dichas consultas con las consultas de todos los demás países se denomina \cod{full}. Las extracciones se realizaron entre marzo y junio de 2024, por lo que estas podrían reflejar los intereses populares de dicho periodo. 
 
-Las parejas consulta--documento además se dividieron en un conjunto de entrenamiento y otro de prueba de tal modo que el artículo de la Wikipedia al que pertenece cualquier párrafo relevante dado sea parte de solo una de las divisiones: ésto con el objetivo de reducir la intersección de tópicos entre los conjuntos de entrenamiento y prueba. El particionado se realizó por país, asignando aproximadamente 20\% de los artículos al conjunto de prueba. 
+Las parejas consulta--documento además se dividieron en una partición de entrenamiento y otra de prueba de tal modo que el artículo de la Wikipedia al que pertenece cualquier párrafo relevante dado sea parte de solo una de las particiones: ésto con el objetivo de reducir la intersección de tópicos entre los conjuntos de entrenamiento y prueba. El particionado se realizó por país, asignando aproximadamente 20\% de los artículos al conjunto de prueba originalmente.
 % TODO: considera mover la siguiente línea más adelante
-En nuestros experimentos utilizamos únicamente el conjunto de prueba \cod{full}, porque los autores de MessIRve solo reportaron sus experimentos en esta división.
+En nuestros experimentos utilizamos únicamente el conjunto de prueba \cod{full}, porque los autores de MessIRve solo reportaron sus experimentos en esta partición.
 
 El conjunto de datos fue presentado oficialmente por los autores \textcite{messirve-ValentiniEtAl2025} durante \textit{The 2025 Conference on Empirical Methods in Natural Language Processing} de la \textit{Association of Computational Linguistics} llevada a cabo del 4 al 5 de noviembre del 2025 en Suzhou, China. Los datos están disponibles en Hugging Face \parencite{messirve-HuggingFace2025}\footnote{\url{https://huggingface.co/datasets/spanish-ir/messirve}} bajo la licencia Creative Commons BY-NC 4.0\footnote{\url{https://creativecommons.org/licenses/by-nc/4.0/}}. Para este proyecto utilizamos la versión 1.2 publicada en julio del 2025.
 
@@ -82,17 +82,9 @@ Para conocer la distribución de la longitud de palabras de las consultas y docu
 \end{table}
 
 
+Una característica importante en la construcción de MessIRve es que la misma consulta puede tener diferentes respuestas inequívocas dependiendo del país en el que se pregunte. Así, por ejemplo, los autores incluyen la consulta ``quién es el presidente'' que tiene una respuesta bien definida en cada país. Una consecuencia de este hecho es que la misma consulta puede tener varios documentos relevantes en el subconjunto \cod{full}. 
 
-% P3: Distribución del número de documentos relevantes por consulta: media, mediana, desviación estándar y frecuencias (calculadas en ir-spanish/analysis/distributions.ipynb, §4). Explicar cómo esta distribución justifica la batería de métricas adoptada en §4.4 (en particular Recall@100 y P@50).
-%   - Distribución de documentos relevantes por consulta (test, v1.2; notebook §4): mín 1, máx 4, media 1.02, mediana 1, desviación estándar 0.16.
-%   - Frecuencias: 1 relevante → 166 201 consultas (97.73 %); 2 → 3 698 (2.17 %); 3 → 143 (0.084 %); 4 → 13 (0.0076 %).
-%   - Por qué hay consultas con más de un relevante: en el subconjunto «full» la misma consulta puede devolver featured snippets distintos en distintos dominios de país \parencite{messirve-ValentiniEtAl2025}. (Este cálculo resuelve el cabo suelto anotado en el changelog del 2026-09-13.)
-%   - Consecuencias para la batería de métricas de §4.4:
-%       • Recall@100 toma valores en {0, 1} por consulta → se interpreta como la proporción de consultas cuyo documento relevante aparece en el top-100: adecuado para evaluar la cobertura de la primera etapa.
-%       • P@50 queda acotada por 1/50 = 0.02 en el 97.7 % de las consultas → rango muy comprimido; se reporta pero no es discriminativa.
-%       • MAP adopta un comportamiento similar al de MRR (con un único relevante, AP = 1/rango del relevante).
-%       • nDCG@10 sigue siendo informativa por su sensibilidad a la posición → de ahí su papel como métrica primaria.
-%   - [Figuras ya generadas por el cuaderno y copiadas a tesis/figuras/ (7 PDF: distribución de relevantes por consulta y longitudes de consultas, de documentos relevantes y del corpus, en train y test); queda pendiente decidir si se incluye alguna en el capítulo. El cuaderno las regenera en ir-spanish/analysis/figures/.]
+En la \cref{tab:messirve-relevantes-por-consulta} podemos observar que alrededor del 98\% de las consultas tienen un solo documento relevante en la partición de prueba. Este hecho tiene consecuencias importantes en la elección de nuestra batería de métricas, como discutimos en el \cref{sec:metodologia-diseno}.
 
 \begin{table}[tbp]
 	\centering
@@ -128,10 +120,39 @@ Para conocer la distribución de la longitud de palabras de las consultas y docu
 % - Rerankers y profundidad de reordenamiento
 % - Implementación y reproducibilidad (ir-spanish, hardware, semillas)
 % P1: Arquitectura del pipeline en tres etapas (recuperación de primera etapa, fusión de rangos, reordenamiento neuronal) y el recorrido de una consulta por ellas; referenciar la figura del pipeline [PENDIENTE: Fig. 4.1]. Enlazar con la arquitectura en cascada del marco teórico (§2.3): la primera etapa maximiza el recall y acota lo que las etapas posteriores pueden recuperar.
+%   - Recorrido de una consulta: (1) cada modelo de primera etapa recupera su lista top-100 sobre el corpus completo (14 047 759 párrafos); (2) las listas se combinan con un algoritmo de fusión de rangos (ranx) en una sola lista; (3) un reranker neuronal reordena los ~100 candidatos de una lista de entrada.
+%   - Escala del escenario: 170 055 consultas de la partición de prueba del subconjunto full; cada etapa posterior solo ve lo que la anterior le entrega.
+%   - Propiedad de la cascada (remite a §2.3): un documento que no entra al top-100 de ninguna lista de entrada no puede aparecer en la lista fusionada ni en la reordenada; de ahí que la primera etapa se evalúe con Recall@100 (cf. §4.4).
+%   - La fusión no requiere inferencia neuronal (opera sobre las listas ya calculadas), a diferencia del reordenamiento: anticipar aquí el contraste de eficiencia que se analiza en el E3.
+%   - [PENDIENTE: Fig. 4.1 del pipeline] — no existe la figura; hay que producirla (diagrama de las tres etapas con los modelos de cada una).
 % P2: Los seis modelos de primera etapa: BM25 (léxico); multilingual-e5-large-instruct, BGE-M3, Qwen3-Embedding-0.6B y jina-embeddings-v5-text-small (densos); SPLADE-v3 (disperso aprendido). Tabla de configuración: identificador en Hugging Face, tipo, número de parámetros y longitud máxima de contexto [valores en ir-spanish/README.md y baselines/]. Incluir la nota sobre el límite de ~0.6B parámetros por restricciones de hardware.
+%   - Tabla de configuración (modelo / tipo / parámetros / contexto máx. configurado), con los valores tomados de los scripts de baselines/ (MODEL_MAX_LENGTH) y del README de ir-spanish:
+%       • BM25 — léxico disperso; sin longitud de contexto (modelo de términos); \parencite{bm25-RobertsonZaragoza2009}.
+%       • intfloat/multilingual-e5-large-instruct — denso (bi-encoder); 560M; 512 tokens; consulta con prompt de instrucción; \parencite{mE5-WangEtAl2024}.
+%       • BAAI/bge-m3 — denso; 568M; 8 192 tokens; \parencite{bgeM3-ChenEtAl2024}.
+%       • Qwen/Qwen3-Embedding-0.6B — denso; 600M; 32 768 tokens; \parencite{qwen3Embedding-ZhangEtAl2025}.
+%       • jinaai/jina-embeddings-v5-text-small-retrieval — denso; 677M; 32 768 tokens; \parencite{jinaEmbeddingsV5-AkramEtAl2026}. (El identificador real lleva el sufijo -retrieval; AGENTS.md lo lista sin él.)
+%       • naver/splade-v3 — disperso aprendido; 512 tokens; \parencite{spladeV3-LassanceEtAl2024}. [VERIFICAR: número de parámetros — no está en el README; está en la ficha de Hugging Face (~110M si es BERT-base).]
+%   - Nota del límite de ~0.6B parámetros: restricción de memoria de las GPU (2 × RTX A5000 de 24 GB); el mayor modelo usado tiene 677M parámetros.
+%   - Todos los modelos son abiertos y están disponibles en Hugging Face (condición del E4).
 % P3: Detalles de la primera etapa: indexación y búsqueda de BM25 con Pyserini; búsqueda exacta de vecinos más cercanos con FAISS (GPU) para los modelos densos; búsqueda dispersa para SPLADE. Profundidad de corte: top-100 por modelo. Semilla 42 en todos los scripts.
+%   - Representación del documento: título y texto concatenados (``título. texto''), el mismo criterio que en §4.1; corpus completo sin filtro de longitud (MAX_WORD_COUNT desactivado).
+%   - BM25: índice Lucene construido con Pyserini con análisis en español (-language es: stemming y stopwords); búsqueda por lotes sobre todos los núcleos; top-100 por consulta.
+%   - Modelos densos: codificación con sentence-transformers en un pool multiproceso sobre las dos GPU; documentos en bloques de 50 000 con caché en disco (.npy float32); embeddings normalizados con la norma L2, de modo que el producto interno equivale a la similitud coseno; búsqueda exacta de vecinos más cercanos con FAISS (IndexFlatIP), índice repartido (sharded) entre las dos GPU en float16; top-100.
+%   - SPLADE-v3: SparseEncoder de sentence-transformers produce los vectores dispersos; la búsqueda es un producto matricial disperso (matrices CSR) en GPU, con los documentos repartidos entre las dos GPU y fusión del top-k global; top-100.
+%   - Profundidad de corte común: top-100 por modelo y por consulta (TOP_K = 100 en todos los scripts); semilla 42 fijada con torch.manual_seed en todos los scripts.
 % P4: Los rerankers: bge-reranker-v2-m3 (cross-encoder), jina-reranker-v3 (listwise) y jina-colbert-v2 (interacción tardía). Precisar sobre qué lista se aplican y con qué profundidad de reordenamiento (~100 candidatos por consulta; verificar en ir-spanish/rerankers/ si parten del run de un solo modelo o de la lista fusionada).
+%   - [VERIFICADO en el código] Los tres rerankers parten del run de un solo modelo de primera etapa — el mejor modelo individual, jina-embeddings-v5-text-small-retrieval — y reordenan sus ~100 candidatos por consulta (la constante FIRST_STAGE_MODEL de los tres scripts). NO parten de la lista fusionada.
+%   - Existe además una variante híbrida (rerankers/hybrid.py): fusión CombMNZ de e5-large + bge-m3 + jina-v5-small reordenada con jina-reranker-v3. [PENDIENTE: decidir si se reporta como parte del E3.]
+%   - bge-reranker-v2-m3: cross-encoder puntual (pointwise): puntúa cada par consulta-documento de forma independiente; longitud máxima 512 tokens (consulta + documento), lotes de 256 pares. [PENDIENTE: no hay entrada en biblio.bib para este modelo; crearla si se cita.]
+%   - jina-reranker-v3: reranker listwise — procesa la consulta y todos los candidatos en una sola pasada con atención cruzada entre documentos; max_query_length 1024, max_doc_length 8192; \parencite{jinaRerankerV3-WangEtAl2025}.
+%   - jina-colbert-v2: interacción tardía estilo ColBERT — un vector por token y puntuación MaxSim (suma sobre tokens de la consulta del máximo coseno con tokens del documento), implementado con pylate; longitudes 32 (consulta) y 300 (documento); \parencite{jinaColbertV2-JhaEtAl2024}.
+%   - Infraestructura común de los tres: un proceso por GPU (spawn), reanudación con checkpoints cada 200 consultas, evaluación con ranx igual que la primera etapa.
 % P5: Implementación y reproducibilidad: repositorio ir-spanish; pila de software (ranx para fusión, métricas y pruebas; sentence-transformers; pyserini; datasets; faiss-gpu); hardware (2 × NVIDIA RTX A5000 de 24 GB, CUDA 12.2); semillas fijadas [verificar si el repositorio será público y añadir la URL].
+%   - Todo el código está en el repositorio ir-spanish (scripts baselines/, rerankers/, utils/; cuadernos de análisis en analysis/). [PENDIENTE: decidir si el repositorio será público y añadir el URL (remoto actual: git@github.com:esteban-mendoza/ir-spanish.git).]
+%   - Pila de software: ranx (fusión, métricas y pruebas de significancia); sentence-transformers (modelos densos, SPLADE y el cross-encoder); pyserini (BM25/Lucene); datasets (carga de MessIRve v1.2 y del corpus eswiki_20240401); faiss-gpu (búsqueda densa exacta); pylate (interacción tardía de ColBERT — falta en la tabla del README de ir-spanish); PyTorch. Versiones mínimas fijadas en requirements.txt (pyserini ≥ 1.5.0, ranx ≥ 0.3.21, sentence-transformers ≥ 5.3.0, pylate ≥ 1.4.0, accelerate ≥ 1.13.0, einops ≥ 0.8.0).
+%   - Hardware: servidor del IIMAS con 2 × NVIDIA RTX A5000 (24 GB de VRAM cada una), CUDA 12.2, driver 535.154.05.
+%   - Reproducibilidad: semilla 42 en todos los scripts; caché en disco de embeddings, qrels podados y runs (formato ranx comprimido) para que las reejecuciones sean idénticas; configuración de datos fija (subconjunto full, versión 1.2, partición de prueba).
 
 \section{Algoritmos de fusión}\label{sec:metodologia-fusion}
 % - Los seis con sus parámetros: CombMNZ, BordaFuse, Condorcet, RRF, ISR (Inverse Square Rank), RBC (Rank-Biased Centroids)
@@ -148,6 +169,15 @@ Para conocer la distribución de la longitud de palabras de las consultas y docu
 %   - Justificación de la elección: Urbano et al. (2019) — t y permutación mantienen el error tipo I nominal, bootstrap sesgado, Wilcoxon y signo poco fiables; Smucker et al. (2007) como antecedente
 %   - Comparaciones múltiples: Tukey HSD para la comparación cruzada de los seis algoritmos (E2)
 % P1: Protocolo común: la unidad de análisis es la consulta del conjunto de prueba; cada sistema produce puntuaciones por consulta y se reportan promedios sobre consultas. Métricas: nDCG@10 (primaria), Recall@100, MRR@10, MAP y P@{10, 50}; las definiciones formales remiten a §2.5.1.
+% P1.1: Distribución del número de documentos relevantes por consulta: media, mediana, desviación estándar y frecuencias (calculadas en ir-spanish/analysis/distributions.ipynb, §4). Explicar cómo esta distribución justifica la batería de métricas adoptada (en particular Recall@100 y P@50).
+%   - Distribución de documentos relevantes por consulta (test, v1.2; notebook §4): mín 1, máx 4, media 1.02, mediana 1, desviación estándar 0.16.
+%   - Frecuencias: 1 relevante → 166 201 consultas (97.73 %); 2 → 3 698 (2.17 %); 3 → 143 (0.084 %); 4 → 13 (0.0076 %).
+%   - Por qué hay consultas con más de un relevante: en el subconjunto «full» la misma consulta puede devolver featured snippets distintos en distintos dominios de país \parencite{messirve-ValentiniEtAl2025}. (Este cálculo resuelve el cabo suelto anotado en el changelog del 2026-09-13.)
+%   - Consecuencias para la batería de métricas de §4.4:
+%       • Recall@100 toma valores en {0, 1} por consulta → se interpreta como la proporción de consultas cuyo documento relevante aparece en el top-100: adecuado para evaluar la cobertura de la primera etapa.
+%       • P@50 queda acotada por 1/50 = 0.02 en el 97.7 % de las consultas → rango muy comprimido; se reporta pero no es discriminativa.
+%       • MAP adopta un comportamiento similar al de MRR (con un único relevante, AP = 1/rango del relevante).
+%       • nDCG@10 sigue siendo informativa por su sensibilidad a la posición → de ahí su papel como métrica primaria.
 % P2: Prueba de significancia: t pareada de Student de dos colas con α = 0.05 para las hipótesis de efectividad media, con la prueba de permutación como alternativa robusta (ambas en ranx.compare). Justificar la elección con Urbano et al. (2019): t y permutación mantienen el error tipo I nominal, bootstrap está sesgado hacia p-valores pequeños y Wilcoxon/signo son poco fiables para diferencias de medias; Smucker et al. (2007) como antecedente [PENDIENTE: entradas de ambos en biblio.bib].
 % P3: Comparaciones múltiples: corrección con Tukey HSD en la comparación cruzada de los seis algoritmos (E2); aclarar por qué E1 y E3 no la requieren (o qué corrección se aplica en su caso) y que E4 queda descriptivo.
 % P4: Convenciones de reporte del cap. 5: mejor valor por columna en negrita, marcadores de significancia estadística y una tabla principal por experimento.
