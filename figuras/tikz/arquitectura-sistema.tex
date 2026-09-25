@@ -1,0 +1,70 @@
+% Diagrama del sistema de recuperación — versión TikZ (nativa de LaTeX).
+% Requiere: tikz con las librerías positioning, fit, backgrounds y shapes.geometric.
+%
+% NOTA: con babel en español los caracteres < y > quedan activos (shorthands) y
+% rompen el parseo de las flechas -> de TikZ. Por eso el grupo siguiente los
+% desactiva mientras se dibuja el diagrama; el efecto no sale del grupo.
+%
+% NOTA: los nodos NO usan «text width»; el ancho lo fijan su contenido y un
+% «minimum width» en los cilindros. Con «text width» las palabras largas
+% (Reordenamiento, Recuperación) desbordaban su caja y LaTeX avisaba de
+% \overfull \hbox aunque la figura cupiera en la página. Las que no caben se
+% parten a mano con «-» (Reordena-/miento, Recupe-/ración).
+\begingroup
+\ifdefined\shorthandoff\shorthandoff{<>}\fi
+\begin{tikzpicture}[
+  font=\scriptsize,
+  x=1mm, y=1mm,
+  box/.style   = {rectangle, rounded corners=2pt, draw, align=center,
+                  inner sep=4pt, minimum height=9mm},
+  store/.style = {cylinder, shape border rotate=90, draw, align=center,
+                  inner sep=3pt, minimum width=19mm,
+                  minimum height=9mm, shape aspect=0.25},
+  src/.style   = {rectangle, rounded corners=2pt, draw, dashed, align=center,
+                  inner sep=4pt, minimum height=9mm},
+  gt/.style    = {store, dashed},
+  etapa/.style = {font=\tiny, text=black!70},
+  every edge/.style = {draw, ->, rounded corners=2mm}
+]
+
+  %% ---------------- Fila 1: fuentes de datos ----------------
+  \node[src] (fuentes) at (0,0) {eswiki\\+\\MessIRve};
+  \node[etapa] at (0,9)            {Datos};
+
+  %% ---------------- Fila 2: almacenes y representación ----------------
+  \node[store] (docs) at (27,0)    {Documentos};
+  \node[store] (qrys) at (27,-19)  {Consultas};
+  \node[box]   (demb) at (55,0)    {Embeddings\\de docs.};
+  \node[box]   (qemb) at (55,-19)  {Embeddings\\de consultas};
+  \node[etapa] at (55,9)           {Representación};
+
+  %% ---------------- Fila 3: recuperación ----------------
+  \node[store] (cache) at (84,0)   {Rankings};
+  \node[box]   (retr)  at (84,-19) {Recupe-\\ración};
+  \node[etapa] at (84,9)           {Recuperación};
+
+  %% ---------------- Fila 4: alternativas ----------------
+  \node[box] (fus) at (109,0)      {Fusión\\de rangos};
+  \node[box] (rer) at (109,-19)    {Reordena-\\miento\\neuronal};
+  \node[etapa] at (109,10.5)       {Alternativas};
+  \node[gt]  (verdad) at (136,-19) {Verdad de\\referencia};
+
+  %% ---------------- Fila 5: evaluación ----------------
+  \node[box] (eval) at (109,-42)   {Evaluación};
+
+  %% ---------------- Aristas ----------------
+  \draw[->] (fuentes) -- (docs);
+  \draw[->] (fuentes.south) |- (qrys.west);
+  \draw[->] (docs) -- (demb);
+  \draw[->] (qrys) -- (qemb);
+  \draw[->] (demb.east) -- (cache.west);
+  \draw[->] (qemb.east) -- (retr.west);
+  \draw[->] (cache.south) -- (retr.north);
+  \draw[->] (retr.east) -- (fus.west);
+  \draw[->] (fus.south) -- (rer.north);
+  \draw[->] (fus.east) -- (eval.north east);
+  \draw[->] (rer.east) -- (eval.east);
+  \draw[->, dashed] (verdad) -- (eval);
+
+\end{tikzpicture}
+\endgroup
