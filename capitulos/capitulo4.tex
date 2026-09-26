@@ -119,7 +119,13 @@ En la \cref{tab:messirve-relevantes-por-consulta} podemos observar que alrededor
 % - Configuración de cada modelo base; nota sobre el límite de 0.6B
 % - Rerankers y profundidad de reordenamiento
 % - Implementación y reproducibilidad (ir-spanish, hardware, semillas)
+
 % P1: Arquitectura del pipeline en tres etapas (recuperación de primera etapa, fusión de rangos, reordenamiento neuronal) y el recorrido de una consulta por ellas; referenciar la figura del pipeline con \cref{fig:pipeline}. Enlazar con la arquitectura en cascada del marco teórico (§2.3): la primera etapa maximiza el recall y acota lo que las etapas posteriores pueden recuperar.
+Para este proyecto creamos un sistema de recuperación de información con la arquitectura que mostramos en la \cref{fig:pipeline} y que describimos a continuación:
+\begin{enumerate}
+	\item Utilizando cada uno de los modelos base considerados obtenemos un \textit{embedding} de cada documento en la base de datos \cod{eswiki} y cada consulta de MessIRve.
+	\item Utilizamos Faiss \cref{faiss-JohnsonEtAl2019} para hacer búsqueda exacta de 
+\end{enumerate}
 %   - Recorrido de una consulta: (1) cada modelo de primera etapa recupera su lista top-100 sobre el corpus completo (14 047 759 párrafos); (2) las listas se combinan con un algoritmo de fusión de rangos (ranx) en una sola lista; (3) un reranker neuronal reordena los ~100 candidatos de una lista de entrada.
 %   - Escala del escenario: 170 055 consultas de la partición de prueba del subconjunto full; cada etapa posterior solo ve lo que la anterior le entrega.
 %   - Propiedad de la cascada (remite a §2.3): un documento que no entra al top-100 de ninguna lista de entrada no puede aparecer en la lista fusionada ni en la reordenada; de ahí que la primera etapa se evalúe con Recall@100 (cf. §4.4).
@@ -143,12 +149,14 @@ En la \cref{tab:messirve-relevantes-por-consulta} podemos observar que alrededor
 %       • naver/splade-v3 — disperso aprendido; 512 tokens; \parencite{spladeV3-LassanceEtAl2024}. [VERIFICAR: número de parámetros — no está en el README; está en la ficha de Hugging Face (~110M si es BERT-base).]
 %   - Nota del límite de ~0.6B parámetros: restricción de memoria de las GPU (2 × RTX A5000 de 24 GB); el mayor modelo usado tiene 677M parámetros.
 %   - Todos los modelos son abiertos y están disponibles en Hugging Face (condición del E4).
+
 % P3: Detalles de la primera etapa: indexación y búsqueda de BM25 con Pyserini; búsqueda exacta de vecinos más cercanos con FAISS (GPU) para los modelos densos; búsqueda dispersa para SPLADE. Profundidad de corte: top-100 por modelo. Semilla 42 en todos los scripts.
 %   - Representación del documento: título y texto concatenados (``título. texto''), el mismo criterio que en §4.1; corpus completo sin filtro de longitud (MAX_WORD_COUNT desactivado).
 %   - BM25: índice Lucene construido con Pyserini con análisis en español (-language es: stemming y stopwords); búsqueda por lotes sobre todos los núcleos; top-100 por consulta.
 %   - Modelos densos: codificación con sentence-transformers en un pool multiproceso sobre las dos GPU; documentos en bloques de 50 000 con caché en disco (.npy float32); embeddings normalizados con la norma L2, de modo que el producto interno equivale a la similitud coseno; búsqueda exacta de vecinos más cercanos con FAISS (IndexFlatIP), índice repartido (sharded) entre las dos GPU en float16; top-100.
 %   - SPLADE-v3: SparseEncoder de sentence-transformers produce los vectores dispersos; la búsqueda es un producto matricial disperso (matrices CSR) en GPU, con los documentos repartidos entre las dos GPU y fusión del top-k global; top-100.
 %   - Profundidad de corte común: top-100 por modelo y por consulta (TOP_K = 100 en todos los scripts); semilla 42 fijada con torch.manual_seed en todos los scripts.
+
 % P4: Los rerankers: bge-reranker-v2-m3 (cross-encoder), jina-reranker-v3 (listwise) y jina-colbert-v2 (interacción tardía). Precisar sobre qué lista se aplican y con qué profundidad de reordenamiento (~100 candidatos por consulta; verificar en ir-spanish/rerankers/ si parten del run de un solo modelo o de la lista fusionada).
 %   - [VERIFICADO en el código] Los tres rerankers parten del run de un solo modelo de primera etapa — el mejor modelo individual, jina-embeddings-v5-text-small-retrieval — y reordenan sus ~100 candidatos por consulta (la constante FIRST_STAGE_MODEL de los tres scripts). NO parten de la lista fusionada.
 %   - Existe además una variante híbrida (rerankers/hybrid.py): fusión CombMNZ de e5-large + bge-m3 + jina-v5-small reordenada con jina-reranker-v3. [PENDIENTE: decidir si se reporta como parte del E3.]

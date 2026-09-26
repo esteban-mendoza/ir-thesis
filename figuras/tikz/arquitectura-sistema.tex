@@ -27,6 +27,11 @@
   x=1mm, y=1mm,
   box/.style   = {rectangle, rounded corners=2pt, draw, align=center,
                   inner sep=4pt, minimum height=9mm},
+  sub/.style   = {rectangle, rounded corners=1.5pt, draw, fill=white,
+                  align=center, inner sep=2pt,
+                  minimum height=7mm, minimum width=24mm},
+  grupo/.style = {rectangle, rounded corners=3pt, draw, fill=black!4,
+                  inner sep=2mm},
   store/.style = {cylinder, shape border rotate=90, draw, align=center,
                   inner sep=3pt, minimum width=19mm,
                   minimum height=9mm, shape aspect=0.25},
@@ -38,45 +43,54 @@
 ]
 
   %% ---------------- Columna 1: fuentes de datos ----------------
-  \node[src] (eswiki)   at (0,0)   {eswiki};
-  \node[src] (messirve) at (0,-19) {MessIRve};
-  \node[etapa] at (0,9)            {Datos};
+  \node[src]   (eswiki)   at (0,0)   {eswiki};
+  \node[src]   (messirve) at (0,-26) {MessIRve};
+  \node[etapa] at (0,17)             {Datos};
 
   %% ---------------- Columna 2: almacenes ----------------
-  \node[store] (docs) at (27,0)    {Documentos};
-  \node[store] (qrys) at (27,-19)  {Consultas};
+  \node[store] (docs) at (25,0)   {Documentos};
+  \node[store] (qrys) at (25,-26) {Consultas};
 
-  %% ---------------- Columna 3: representación ----------------
-  \node[box]   (demb) at (55,0)    {Embeddings\\de docs.};
-  \node[box]   (qemb) at (55,-19)  {Embeddings\\de consultas};
-  \node[etapa] at (55,9)           {Representación};
+  %% ---------------- Columna 3: representación e indexación ----------------
+  \node[sub] (demb) at (56,4.5)   {Vectores densos};
+  \node[sub] (dinv) at (56,-4.5)  {Índice invertido};
+  \node[sub] (qemb) at (56,-21.5) {Vectores densos};
+  \node[sub] (qtok) at (56,-30.5) {Vectores dispersos};
+
+  \begin{scope}[on background layer]
+    \node[grupo, fit=(demb)(dinv),
+          label={[etapa]above:Índices de documentos}] (dgrp) {};
+    \node[grupo, fit=(qemb)(qtok),
+          label={[etapa]below:Consultas codificadas}] (qgrp) {};
+  \end{scope}
+  \node[etapa] at (56,17) {Representación e indexación};
 
   %% ---------------- Columna 4: recuperación ----------------
-  \node[store] (cache) at (84,0)   {Caché de\\rankings};
-  \node[box]   (retr)  at (84,-19) {Recupe-\\ración};
-  \node[etapa] at (84,9)           {Recuperación};
+  \node[store] (cache) at (90,0)   {Caché de\\rankings};
+  \node[box]   (retr)  at (90,-26) {Recuperación\\[1pt]{\tiny densa / dispersa}};
+  \node[etapa] at (90,17)          {Recuperación};
 
   %% ---------------- Columna 5: alternativas ----------------
-  \node[box] (fus) at (109,0)      {Fusión\\de rangos};
-  \node[box] (rer) at (109,-19)    {Reordena-\\miento\\neuronal};
-  \node[etapa] at (109,10.5)       {Alternativas};
+  \node[box]   (fus) at (116,0)   {Fusión\\de rangos};
+  \node[box]   (rer) at (116,-26) {Reordena-\\miento\\neuronal};
+  \node[etapa] at (116,17)        {Alternativas};
 
   %% ---------------- Verdad de referencia y evaluación ----------------
-  \node[gt]  (verdad) at (27,-42)  {Verdad de\\referencia};
-  \node[box] (eval)   at (109,-42) {Evaluación};
+  \node[gt]  (verdad) at (25,-48)  {Verdad de\\referencia};
+  \node[box] (eval)   at (116,-48) {Evaluación};
 
   %% ---------------- Aristas: flujo principal ----------------
   \draw[->] (eswiki) -- (docs);
   \draw[->] (messirve) -- (qrys);
   \draw[->] (messirve.south) |- (verdad.west);
-  \draw[->] (docs) -- (demb);
-  \draw[->] (qrys) -- (qemb);
-  \draw[->] (demb.east) -- ++(6,0) -- ++(0,-11) -| ([xshift=-4mm]retr.north);
-  \draw[->] (qemb.east) -- (retr.west);
+  \draw[->] (docs) -- (dgrp);
+  \draw[->] (qrys) -- (qgrp);
+  \draw[->] (dgrp.east) -- ++(4,0) -- ++(0,-13) -| ([xshift=-4mm]retr.north);
+  \draw[->] (qgrp.east) -- (retr.west);
   \draw[<->] (cache.south) -- (retr.north);
 
-  %% ---------------- Aristas: bifurcación en las dos alternativas ----------------
-  \draw (retr.east) -- ++(6,0) coordinate (bif);
+  %% ---------------- Aristas: bifurcación ----------------
+  \draw (retr.east) -- ++(3,0) coordinate (bif);
   \draw[->] (bif) |- (fus.west);
   \draw[->] (bif) -- (rer.west);
 

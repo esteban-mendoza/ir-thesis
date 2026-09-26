@@ -54,6 +54,30 @@
   year    = {2026}
 }
 
+% Biblioteca de búsqueda de vecinos más cercanos (búsqueda densa en GPU). El
+% repositorio oficial de FAISS pide citar, **para la versión GPU**, este artículo
+% y no el repositorio, así que es la referencia que va en el texto (§4.2: FAISS
+% con IndexFlatIP). No hay PDF en `recursos/` porque es un recurso web; la clave
+% sigue el esquema <modelo-o-tema>-<AutoresEnPascalCase><Año> (ver AGENTS.md),
+% de modo que si se descarga el artículo el archivo debe llamarse
+% `faiss-JohnsonEtAl2019.pdf`.
+% El DOI es obligatorio en APA 7 cuando existe (sustituye al URL). El volumen
+% 7(3) y las páginas 535-547 son del número impreso de 2021, pero la cita
+% canónica del repositorio (y de los autores) usa 2019, el año de publicación en
+% línea; no «corregir» el campo `year` a 2021 sin cambiar también las citas del
+% texto.
+@article{faiss-JohnsonEtAl2019,
+  title     = {Billion-scale similarity search with {GPUs}},
+  author    = {Johnson, Jeff and Douze, Matthijs and J{\'e}gou, Herv{\'e}},
+  journal   = {IEEE Transactions on Big Data},
+  volume    = {7},
+  number    = {3},
+  pages     = {535--547},
+  year      = {2019},
+  publisher = {IEEE},
+  doi       = {10.1109/TBDATA.2019.2921572}
+}
+
 @inproceedings{splade-FormalEtAl2021,
   title     = {SPLADE: Sparse lexical and expansion model for first stage ranking},
   author    = {Formal, Thibault and Piwowarski, Benjamin and Clinchant, St{\'e}phane},

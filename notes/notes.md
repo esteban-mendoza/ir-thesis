@@ -13,6 +13,8 @@
   - Agregar nota sobre por qué nos limitamos a modelos 0.6B debido a falta de hardware más potente
   - Probar gemini-embedding-001? Todavía lo estoy considerando.
   - Considerar agregar resúmenes al final de cada capítulo
+  - Agregar una sección sobre limitaciones de MessIRve. 
+    - Falta de negativos.
 
 ## Modelos
 
