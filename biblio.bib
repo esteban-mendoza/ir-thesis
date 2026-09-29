@@ -78,6 +78,60 @@
   doi       = {10.1109/TBDATA.2019.2921572}
 }
 
+% Pyserini: la interfaz de Python con la que construimos el índice BM25 y
+% ejecutamos la búsqueda léxica (§4.2; `baselines/bm25.py` usa `LuceneIndexer`
+% y `LuceneSearcher` de `pyserini.index.lucene` y `pyserini.search.lucene`).
+% Lleva `editor` y `publisher` porque biblatex-apa, sin `editor`, cae a una
+% forma tipo artículo y pierde la editorial y las páginas entre paréntesis (ver
+% la nota de `messirve-ValentiniEtAl2025`). Los editores son los del congreso
+% (presidentes generales y de programa), tal como los lista el acta de ACM.
+@inproceedings{pyserini-LinEtAl2021,
+  title     = {Pyserini: A {Python} toolkit for reproducible information retrieval research with sparse and dense representations},
+  author    = {Lin, Jimmy and Ma, Xueguang and Lin, Sheng-Chieh and Yang, Jheng-Hong and Pradeep, Ronak and Nogueira, Rodrigo},
+  booktitle = {Proceedings of the 44th International ACM SIGIR Conference on Research and Development in Information Retrieval},
+  editor    = {Diaz, Fernando and Shah, Chirag and Suel, Torsten and Castells, Pablo and Jones, Rosie and Sakai, Tetsuya},
+  pages     = {2356--2362},
+  publisher = {Association for Computing Machinery},
+  doi       = {10.1145/3404835.3463238},
+  year      = {2021}
+}
+
+% Anserini: el conjunto de herramientas de Java sobre el que se apoya Pyserini;
+% es quien construye y busca el índice (clases `SimpleSearcher` y compañía) y de
+% quien salen los valores por defecto de BM25 que usamos sin tocar: k1 = 0.9 y
+% b = 0.4 (`LuceneSearcher.set_bm25` de Pyserini 1.5.0 los repite como propios).
+% Ojo: esta cita respalda **la implementación y sus parámetros**, no el origen de
+% BM25, que es Okapi y va con `bm25-RobertsonZaragoza2009` (y las de 1994).
+@article{anserini-YangEtAl2018,
+  title   = {Anserini: Reproducible ranking baselines using Lucene},
+  author  = {Yang, Peilin and Fang, Hui and Lin, Jimmy},
+  journal = {Journal of Data and Information Quality},
+  volume  = {10},
+  number  = {4},
+  pages   = {1--20},
+  year    = {2018},
+  doi     = {10.1145/3239571}
+}
+
+% Apache Lucene: el motor que calcula las puntuaciones BM25 (`BM25Similarity`)
+% sobre el índice que construye Anserini. No hay artículo que citar —es
+% software—, así que va como recurso web con `note = {Software}` (la convención
+% de `messirve-HuggingFace2025`; biblatex-apa añade los corchetes) y sin
+% `organization`, para no repetir «Apache Software Foundation» como autor y como
+% editorial. La versión **9.9.1** es la que se ejecutó de verdad, verificada en el
+% servidor: `pyserini 1.5.0` trae `anserini-1.5.0-fatjar.jar` y el `pom.xml` de
+% ese jar fija `<lucene.version>9.9.1</lucene.version>` (clases compiladas el
+% 2023-12-13); de ahí el año 2023, que es el de la versión utilizada y no el de
+% la publicación de este .bib. No hay PDF en `recursos/`.
+@online{lucene-ApacheSoftwareFoundation2023,
+  author  = {{Apache Software Foundation}},
+  title   = {Apache Lucene},
+  year    = {2023},
+  version = {9.9.1},
+  note    = {Software},
+  url     = {https://lucene.apache.org/}
+}
+
 @inproceedings{splade-FormalEtAl2021,
   title     = {SPLADE: Sparse lexical and expansion model for first stage ranking},
   author    = {Formal, Thibault and Piwowarski, Benjamin and Clinchant, St{\'e}phane},

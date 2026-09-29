@@ -2,31 +2,34 @@
 
 ## Pendientes
 
-- Tesis
-  - Investigar sobre 3.8.3 Similitud entre listas de ranking (Kendall τ vs RBO) — **resuelto**: RBO (Webber et al., 2010); Kendall τ exige listas conjuntas. Ver indice.md §5.5
-  - Agregar un apéndice con estadísticas descriptivas de MessIRve
-    - Estudiar distribución del número de documentos relevantes por query para explicar métricas
-  - Revisar resultados y métodos:
-    - Artículos utilizando MessIRve
-    - MTEB y La Leaderboard
-    - Comparar los resultados obtenidos con resultados en otras lenguas para todos los modelos involucrados
-  - Agregar nota sobre por qué nos limitamos a modelos 0.6B debido a falta de hardware más potente
-  - Probar gemini-embedding-001? Todavía lo estoy considerando.
-  - Considerar agregar resúmenes al final de cada capítulo
-  - Agregar una sección sobre limitaciones de MessIRve. 
-    - Falta de negativos.
+
+- Investigar sobre 3.8.3 Similitud entre listas de ranking (Kendall τ vs RBO) — **resuelto**: RBO (Webber et al., 2010); Kendall τ exige listas conjuntas. Ver indice.md §5.5
+- Agregar un apéndice con estadísticas descriptivas de MessIRve
+  - Estudiar distribución del número de documentos relevantes por query para explicar métricas
+- Revisar resultados y métodos:
+  - Artículos utilizando MessIRve
+  - MTEB y La Leaderboard
+  - Comparar los resultados obtenidos con resultados en otras lenguas para todos los modelos involucrados
+- Agregar nota sobre por qué nos limitamos a modelos 0.6B debido a falta de hardware más potente
+- Probar gemini-embedding-001? Todavía lo estoy considerando.
+- Considerar agregar resúmenes al final de cada capítulo
+- Agregar una sección sobre limitaciones de MessIRve. 
+  - Falta de negativos.
+- Considera refactorizar ColBERT para guardar embeddings a nivel de tokens.
+  - También puede usarse como recuperador de primera etapa, con índices especializados como PLAID
+- 
 
 ## Modelos
 
 - Léxicos
   - BM25
+- Dispersos:
+  - naver/splade-v3
 - Dual-encoders:
   - intfloat/multilingual-e5-large-instruct
   - BAAI/bge-m3
   - Qwen/Qwen3-Embedding-0.6B
   - jinaai/jina-embeddings-v5-text-small
-- Dispersos:
-  - naver/splade-v3
 - Interacción tardía:
   - jinaai/jina-colbert-v2
 - Cross-encoders:

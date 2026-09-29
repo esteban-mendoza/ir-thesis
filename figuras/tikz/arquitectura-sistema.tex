@@ -29,7 +29,7 @@
                   inner sep=4pt, minimum height=9mm},
   sub/.style   = {rectangle, rounded corners=1.5pt, draw, fill=white,
                   align=center, inner sep=2pt,
-                  minimum height=7mm, minimum width=24mm},
+                  minimum height=8mm, minimum width=24mm},
   grupo/.style = {rectangle, rounded corners=3pt, draw, fill=black!4,
                   inner sep=2mm},
   store/.style = {cylinder, shape border rotate=90, draw, align=center,
@@ -41,43 +41,43 @@
   etapa/.style = {font=\tiny, text=black!70},
   every edge/.style = {draw, ->, rounded corners=2mm}
 ]
-
   %% ---------------- Columna 1: fuentes de datos ----------------
   \node[src]   (eswiki)   at (0,0)   {eswiki};
-  \node[src]   (messirve) at (0,-26) {MessIRve};
-  \node[etapa] at (0,17)             {Datos};
+  \node[src]   (messirve) at (0,-40) {MessIRve};
+  \node[etapa] at (0,22)             {Datos};
 
   %% ---------------- Columna 2: almacenes ----------------
   \node[store] (docs) at (25,0)   {Documentos};
-  \node[store] (qrys) at (25,-26) {Consultas};
+  \node[store] (qrys) at (25,-40) {Consultas};
 
-  %% ---------------- Columna 3: representación e indexación ----------------
-  \node[sub] (demb) at (56,4.5)   {Vectores densos};
-  \node[sub] (dinv) at (56,-4.5)  {Índice invertido};
-  \node[sub] (qemb) at (56,-21.5) {Vectores densos};
-  \node[sub] (qtok) at (56,-30.5) {Vectores dispersos};
+  %% ---------------- Columna 3: codificación e indexación ----------------
+  % Documentos (centro del grupo en y = 0)
+  \node[sub] (demb) at (56,10)  {Vectores densos};
+  \node[sub] (dspl) at (56,0)   {Vectores dispersos};
+  \node[sub] (dbm)  at (56,-10) {Índice invertido};
+  % Consultas (centro del grupo en y = -40)
+  \node[sub] (qemb) at (56,-35) {Vectores densos};
+  \node[sub] (qspl) at (56,-45) {Vectores dispersos};
 
   \begin{scope}[on background layer]
-    \node[grupo, fit=(demb)(dinv),
-          label={[etapa]}] (dgrp) {};
-    \node[grupo, fit=(qemb)(qtok),
-          label={[etapa]}] (qgrp) {};
+    \node[grupo, fit=(demb)(dspl)(dbm)] (dgrp) {};
+    \node[grupo, fit=(qemb)(qspl)]      (qgrp) {};
   \end{scope}
-  \node[etapa] at (56,17) {Codificación e indexación};
+  \node[etapa] at (56,22) {Codificación e indexación};
 
   %% ---------------- Columna 4: recuperación ----------------
   \node[store] (cache) at (90,0)   {Caché de\\rankings};
-  \node[box]   (retr)  at (90,-26) {Recuperación\\[1pt]{\tiny densa / dispersa}};
-  \node[etapa] at (90,17)          {Recuperación};
+  \node[box]   (retr)  at (90,-40) {Recuperación\\[1pt]{\tiny léxica\,/\,densa\,/\,dispersa}};
+  \node[etapa] at (90,22)          {Recuperación};
 
-  %% ---------------- Columna 5: Reordenamiento ----------------
-  \node[box]   (fus) at (116,0)   {Fusión\\de rangos};
-  \node[box]   (rer) at (116,-26) {Reordena-\\miento\\neuronal};
-  \node[etapa] at (116,17)        {Reordenamiento};
+  %% ---------------- Columna 5: reordenamiento ----------------
+  \node[box]   (fus) at (118,0)   {Fusión\\de rangos};
+  \node[box]   (rer) at (118,-40) {Reordena-\\miento\\neuronal};
+  \node[etapa] at (118,22)        {Reordenamiento};
 
   %% ---------------- Verdad de referencia y evaluación ----------------
-  \node[gt]  (verdad) at (25,-48)  {Verdad de\\referencia};
-  \node[box] (eval)   at (116,-48) {Evaluación};
+  \node[gt]  (verdad) at (25,-62)  {Verdad de\\referencia};
+  \node[box] (eval)   at (118,-62) {Evaluación};
 
   %% ---------------- Aristas: flujo principal ----------------
   \draw[->] (eswiki) -- (docs);
@@ -85,7 +85,7 @@
   \draw[->] (messirve.south) |- (verdad.west);
   \draw[->] (docs) -- (dgrp);
   \draw[->] (qrys) -- (qgrp);
-  \draw[->] (dgrp.east) -- ++(4,0) -- ++(0,-13) -| ([xshift=-4mm]retr.north);
+  \draw[->] (dgrp.east) -- ++(4,0) -- ++(0,-20) -| ([xshift=-4mm]retr.north);
   \draw[->] (qgrp.east) -- (retr.west);
   \draw[<->] (cache.south) -- (retr.north);
 
@@ -98,6 +98,5 @@
   \draw[->] (rer.south) -- (eval.north);
   \draw[->] (fus.east) -- ++(9,0) |- (eval.east);
   \draw[->, dashed] (verdad.east) -- (eval.west);
-
 \end{tikzpicture}
 \endgroup
