@@ -59,21 +59,21 @@
 
   \begin{scope}[on background layer]
     \node[grupo, fit=(demb)(dinv),
-          label={[etapa]above:Índices de documentos}] (dgrp) {};
+          label={[etapa]}] (dgrp) {};
     \node[grupo, fit=(qemb)(qtok),
-          label={[etapa]below:Consultas codificadas}] (qgrp) {};
+          label={[etapa]}] (qgrp) {};
   \end{scope}
-  \node[etapa] at (56,17) {Representación e indexación};
+  \node[etapa] at (56,17) {Codificación e indexación};
 
   %% ---------------- Columna 4: recuperación ----------------
   \node[store] (cache) at (90,0)   {Caché de\\rankings};
   \node[box]   (retr)  at (90,-26) {Recuperación\\[1pt]{\tiny densa / dispersa}};
   \node[etapa] at (90,17)          {Recuperación};
 
-  %% ---------------- Columna 5: alternativas ----------------
+  %% ---------------- Columna 5: Reordenamiento ----------------
   \node[box]   (fus) at (116,0)   {Fusión\\de rangos};
   \node[box]   (rer) at (116,-26) {Reordena-\\miento\\neuronal};
-  \node[etapa] at (116,17)        {Alternativas};
+  \node[etapa] at (116,17)        {Reordenamiento};
 
   %% ---------------- Verdad de referencia y evaluación ----------------
   \node[gt]  (verdad) at (25,-48)  {Verdad de\\referencia};
