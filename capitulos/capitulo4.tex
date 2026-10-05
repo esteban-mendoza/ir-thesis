@@ -129,13 +129,17 @@ Para este proyecto creamos un sistema de recuperación de información con la ar
 		\item un índice invertido que asocia cada término con una lista de documentos que lo contienen cuando utilizamos el modelo \cod{BM25} de coincidencia léxica,
 		\item representaciones vectoriales dispersas de documentos y consultas cuando usamos el modelo \cod{splade-v3}.
 	\end{enumerate}
-	\item \textbf{Recuperación.} Hacemos búsqueda con cada modelo ``de primera etapa''. El resultado es un \textit{ranking} de los documentos asociados a cada consulta ordenados por relevancia. Guardamos estos resultados en caché.
+	\item \textbf{Recuperación.} Hacemos búsqueda con cada modelo ``de primera etapa''. El resultado es un \textit{ranking} de 100 documentos asociados a cada consulta ordenados por relevancia. Guardamos estos resultados en caché.
 	\begin{enumerate}
 		\item utilizamos Faiss \parencite{faiss-JohnsonEtAl2019} para hacer búsqueda exacta para las representaciones densas y dispersas producidas por los modelos \textit{dual--encoders} y \cod{splade-v3},
 		\item utilizamos Lucene \parencite{lucene-ApacheSoftwareFoundation2023} a partir de PySerini \parencite{pyserini-LinEtAl2021} para hacer búsqueda léxica del modelo \cod{BM25}.
 	\end{enumerate}
 	\item \textbf{Reordenamiento.} 
-	\item \textbf{Evaluación.}
+	\begin{enumerate}
+		\item Rerankers
+		\item Modelos neuronales de reordenamiento.
+	\end{enumerate}
+	\item \textbf{Evaluación.} 
 \end{enumerate}
 
 \begin{figure}[tbp]
